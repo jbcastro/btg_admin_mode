@@ -35,6 +35,9 @@ class App extends Component {
 
       .then(res => {
         const glassesData = res.express;
+        glassesData.sort(
+          (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
+        );
 
         this.setState({ glasses: glassesData });
         this.setState({ unFilteredWines: glassesData });
@@ -159,8 +162,14 @@ class App extends Component {
           result.description3 === id ||
           result.description4 === id ||
           result.description5 === id ||
-          result.description6 === id
+          result.description6 === id ||
+          result.description7 === id ||
+          result.description8 === id ||
+          result.description9 === id ||
+          result.description10 === id
         );
+      } else {
+        return result.color === id;
       }
     });
 

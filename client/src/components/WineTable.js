@@ -6,14 +6,13 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TablePagination from "@material-ui/core/TablePagination";
-
-import Button from "@material-ui/core/Button";
 import ButtonBase from "@material-ui/core/ButtonBase";
-import { maxWidth, flexbox } from "@material-ui/system";
-import { purple, red } from "@material-ui/core/colors";
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Icon from "@material-ui/core/Icon";
 
 const WineTable = props => {
+  const handleOnClick = props.handleOnClick;
   const handleSelect = props.handleSelect;
   const onSelect = props.onSelect;
   const onClick = props.onClick;
@@ -27,7 +26,7 @@ const WineTable = props => {
   const appellation = "appellation";
   const grape = "grape";
   const description = "description";
-  const price = "price";
+
   const mise = "mise";
   const color = "color";
   const status = "status";
@@ -38,8 +37,12 @@ const WineTable = props => {
 
   const useStyles = makeStyles(theme => ({
     button: {
-      color: "red",
-      fontSize: ".4em"
+      color: "blue",
+      fontSize: ".7em"
+    },
+
+    delete: {
+      margin: theme.spacing(1)
     },
     input: {},
     root: {
@@ -65,11 +68,9 @@ const WineTable = props => {
 
   return (
     <Paper className={classes.root}>
-      <ButtonBase onClick={event => onClear(event)}>Clear Filters</ButtonBase>
+      <ButtonBase onClick={onClear}>Clear Filters</ButtonBase>
       <p></p>
-      <ButtonBase onClick={event => showAddForm(event)}>
-        Show/hide Add Form
-      </ButtonBase>
+      <ButtonBase onClick={showAddForm}>Show/hide Add Form</ButtonBase>
       <Table className={classes.table}>
         <TableHead className={classes.head}>
           <TableRow className={classes.TableRow}>
@@ -368,14 +369,8 @@ const WineTable = props => {
               <TableCell className={classes.tableCell}>
                 <h5>Price</h5>
                 <p></p>
-                <ButtonBase
-                  className={classes.button}
-                  id={glass.price}
-                  value={price}
-                  onClick={event => onSelect(event)}
-                >
-                  {glass.price}
-                </ButtonBase>
+
+                {glass.price}
               </TableCell>
               <TableCell className={classes.tableCell}>
                 <h5>Mise</h5>
@@ -426,6 +421,16 @@ const WineTable = props => {
           ))}
         </TableBody>
       </Table>
+      <Button
+        size="small"
+        variant="contained"
+        color="secondary"
+        className={classes.delete}
+        onClick={handleOnClick}
+        startIcon={<DeleteIcon />}
+      >
+        delete
+      </Button>
     </Paper>
   );
 };

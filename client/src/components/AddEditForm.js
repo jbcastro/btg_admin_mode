@@ -61,17 +61,6 @@ const AddEditForm = props => {
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
           required
-          label="Vinyard"
-          className={classes.textField}
-          type="text"
-          name="vinyard"
-          placeholder="vinyard"
-          onChange={props.onChange}
-          value={props.curItem.vinyard || ""}
-          margin="normal"
-        />
-        <TextField
-          required
           label="Name"
           className={classes.textField}
           type="text"
@@ -79,6 +68,17 @@ const AddEditForm = props => {
           placeholder="name"
           onChange={props.onChange}
           value={props.curItem.name || ""}
+          margin="normal"
+        />
+        <TextField
+          required
+          label="Vinyard"
+          className={classes.textField}
+          type="text"
+          name="vinyard"
+          placeholder="vinyard"
+          onChange={props.onChange}
+          value={props.curItem.vinyard || ""}
           margin="normal"
         />
         <TextField
@@ -352,14 +352,6 @@ const AddEditForm = props => {
         add/update
       </Button>
 
-      <Button
-        variant="contained"
-        color="secondary"
-        className={classes.button}
-        onClick={() => handleOnClick()}
-      >
-        delete
-      </Button>
       <Button
         variant="contained"
         color="primary"

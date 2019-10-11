@@ -39,6 +39,7 @@ var mySchema = mongoose.Schema(
     timestamp: { type: Date },
     price: { type: Number },
     mise: { type: String },
+    lastUpdated: { type: Date },
 
     color: { type: String },
     status: { type: String }
@@ -49,20 +50,3 @@ var mySchema = mongoose.Schema(
 );
 
 module.exports = mongoose.model("Wine", mySchema);
-
-// var Wines = mongoose.model("Wine", mySchema);
-
-// Wines.find({}, function(err, winenum) {
-//   if (err) throw err;
-//   console.log(winenum);
-// });
-
-// Wines.findOne({ year: "nv" }, (err, wines) => {
-//   if (err) throw err;
-//   console.log(wines);
-// });
-
-// Wines.killOne({ winenum: "test1111" }, (err, wines) => {
-//   if (err) throw err;
-//   console.log(wines);
-// });

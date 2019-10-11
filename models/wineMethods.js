@@ -48,6 +48,7 @@ exports.addOne = (
   timestamp1,
   price1,
   mise1,
+  lastUpdated1,
 
   color1,
   status1
@@ -81,7 +82,8 @@ exports.addOne = (
       mise: mise1,
 
       color: color1,
-      status: status1
+      status: status1,
+      lastUpadted: lastUpdated1
     },
     (err, result) => {
       if (err) throw err;

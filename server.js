@@ -83,6 +83,7 @@ app.post("/express_backend/add", (req, res) => {
       timestamp: Date.now(),
       price: req.body.price,
       mise: req.body.mise,
+      lastUpdated: Date.now(),
 
       color: req.body.color,
       status: req.body.status
@@ -121,7 +122,7 @@ app.post("/express_backend/add", (req, res) => {
 
         funfact: req.body.funfact,
         price: req.body.price,
-        timestamp: Date.now(),
+        lastUpdated: Date.now(),
         mise: req.body.mise,
 
         color: req.body.color,
