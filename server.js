@@ -86,7 +86,8 @@ app.post("/express_backend/add", (req, res) => {
       lastUpdated: Date.now(),
 
       color: req.body.color,
-      status: req.body.status
+      status: req.body.status,
+      picture: req.body.picture
     });
     small.save((err, newWine) => {
       if (err) return handleError(err);
@@ -126,7 +127,8 @@ app.post("/express_backend/add", (req, res) => {
         mise: req.body.mise,
 
         color: req.body.color,
-        status: req.body.status
+        status: req.body.status,
+        picture: req.body.picture
       },
       (err, result) => {
         if (err) return next(err);

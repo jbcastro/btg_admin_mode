@@ -51,7 +51,8 @@ exports.addOne = (
   lastUpdated1,
 
   color1,
-  status1
+  status1,
+  picture1
 ) => {
   return Wines.create(
     {
@@ -83,7 +84,8 @@ exports.addOne = (
 
       color: color1,
       status: status1,
-      lastUpadted: lastUpdated1
+      lastUpadted: lastUpdated1,
+      picture: picture1
     },
     (err, result) => {
       if (err) throw err;

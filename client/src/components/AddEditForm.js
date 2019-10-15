@@ -328,6 +328,15 @@ const AddEditForm = props => {
           </Select>
         </FormControl>
         <TextField
+          label="Picture"
+          type="text"
+          name="picture"
+          placeholder="Picture"
+          onChange={props.onChange}
+          value={props.curItem.picture || ""}
+          margin="normal"
+        />
+        <TextField
           fullWidth
           multiline
           label="Funfact"

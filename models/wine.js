@@ -42,7 +42,8 @@ var mySchema = mongoose.Schema(
     lastUpdated: { type: Date },
 
     color: { type: String },
-    status: { type: String }
+    status: { type: String },
+    picture: { type: String }
   },
   {
     versionKey: false
