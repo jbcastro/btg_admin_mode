@@ -429,7 +429,6 @@ const WineTable = props => {
         color="secondary"
         className={classes.delete}
         onClick={handleOnClick}
-        startIcon={<DeleteIcon />}
       >
         delete
       </Button>

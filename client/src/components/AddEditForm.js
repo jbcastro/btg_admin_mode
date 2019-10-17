@@ -19,6 +19,7 @@ const AddEditForm = props => {
 
   const onCurItemClear = props.onCurItemClear;
   const handleNextClick = props.handleNextClick;
+  const handlePrevClick = props.handlePrevClick;
 
   const useStyles = makeStyles(theme => ({
     button: {
@@ -63,6 +64,8 @@ const AddEditForm = props => {
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
           required
+          fullWidth
+          multiline
           label="Name"
           className={classes.textField}
           type="text"
@@ -415,6 +418,7 @@ const AddEditForm = props => {
           }}
         />
       </form>
+
       <Button
         variant="contained"
         color="primary"
@@ -432,7 +436,23 @@ const AddEditForm = props => {
       >
         clear
       </Button>
-      <ButtonBase onClick={handleNextClick}>next</ButtonBase>
+      <p></p>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={handlePrevClick}
+      >
+        prev
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={handleNextClick}
+      >
+        next
+      </Button>
     </div>
   );
 };

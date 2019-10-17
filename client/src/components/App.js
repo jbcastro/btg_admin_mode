@@ -28,6 +28,7 @@ class App extends Component {
     this.onCurItemClear = this.onCurItemClear.bind(this);
     this.showAddForm = this.showAddForm.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
+    this.handlePrevClick = this.handlePrevClick.bind(this);
   }
 
   componentDidMount() {
@@ -192,13 +193,28 @@ class App extends Component {
     this.setState(state => ({ addFormHidden: !this.state.addFormHidden }));
   };
   handleNextClick = () => {
-    // let curItem = this.state.curItem;
-    // let glasses = this.state.unFilteredWines;
-    // let curIndex = glasses.indexOf(curItem);
-    var i;
-    for (i = 0; i < 10; i++) {
-      console.log(i);
-    }
+    let curItem = this.state.curItem;
+    const glasses = this.state.unFilteredWines;
+    let index = glasses.indexOf(curItem);
+    let nextIndex = index + 1;
+
+    glasses.map(result => {
+      if (glasses.indexOf(result) === nextIndex) {
+        this.setState({ curItem: result });
+      }
+    });
+  };
+  handlePrevClick = () => {
+    let curItem = this.state.curItem;
+    const glasses = this.state.unFilteredWines;
+    let index = glasses.indexOf(curItem);
+    let nextIndex = index - 1;
+
+    glasses.map(result => {
+      if (glasses.indexOf(result) === nextIndex) {
+        this.setState({ curItem: result });
+      }
+    });
   };
 
   ///render portion
@@ -221,6 +237,7 @@ class App extends Component {
             handleOnClick={this.handleOnClick}
             onCurItemClear={this.onCurItemClear}
             handleNextClick={this.handleNextClick}
+            handlePrevClick={this.handlePrevClick}
             glasses={this.state.glasses}
           />
           <WineTable
