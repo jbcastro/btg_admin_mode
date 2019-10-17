@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
+import ButtonBase from "@material-ui/core/ButtonBase";
 
 const AddEditForm = props => {
   const handleSubmit = props.handleSubmit;
@@ -17,6 +18,7 @@ const AddEditForm = props => {
   const onChange = props.onChange;
 
   const onCurItemClear = props.onCurItemClear;
+  const handleNextClick = props.handleNextClick;
 
   const useStyles = makeStyles(theme => ({
     button: {
@@ -117,6 +119,15 @@ const AddEditForm = props => {
           placeholder="Grape 3"
           onChange={props.onChange}
           value={props.curItem.grape3 || ""}
+          margin="normal"
+        />
+        <TextField
+          label="Grape 4"
+          type="text"
+          name="grape4"
+          placeholder="Grape 4"
+          onChange={props.onChange}
+          value={props.curItem.grape4 || ""}
           margin="normal"
         />
         <TextField
@@ -260,6 +271,42 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
+          label="Description11"
+          type="text"
+          name="description11"
+          placeholder="Description 11"
+          onChange={props.onChange}
+          value={props.curItem.description11 || ""}
+          margin="normal"
+        />
+        <TextField
+          label="Description12"
+          type="text"
+          name="description12"
+          placeholder="Description 12"
+          onChange={props.onChange}
+          value={props.curItem.description12 || ""}
+          margin="normal"
+        />
+        <TextField
+          label="Description13"
+          type="text"
+          name="description13"
+          placeholder="Description 13"
+          onChange={props.onChange}
+          value={props.curItem.description13 || ""}
+          margin="normal"
+        />
+        <TextField
+          label="Description14"
+          type="text"
+          name="description14"
+          placeholder="Description 14"
+          onChange={props.onChange}
+          value={props.curItem.description14 || ""}
+          margin="normal"
+        />
+        <TextField
           id="standard-number"
           label="Price"
           type="number"
@@ -287,6 +334,22 @@ const AddEditForm = props => {
             <MenuItem value={"BDX"}>BDX</MenuItem>
             <MenuItem value={"Flute"}>Flute</MenuItem>
             <MenuItem value={"DW"}>DW</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink htmlFor="coravin-native-label-placeholder">
+            Corvin
+          </InputLabel>
+          <Select
+            value={props.curItem.coravin}
+            onChange={onChange}
+            inputProps={{
+              name: "coravin",
+              id: "coravin-simple"
+            }}
+          >
+            <MenuItem value={true}>TRUE</MenuItem>
+            <MenuItem value={false}>FALSE</MenuItem>
           </Select>
         </FormControl>
         <FormControl className={classes.formControl}>
@@ -369,6 +432,7 @@ const AddEditForm = props => {
       >
         clear
       </Button>
+      <ButtonBase onClick={handleNextClick}>next</ButtonBase>
     </div>
   );
 };

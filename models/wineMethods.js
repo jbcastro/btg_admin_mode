@@ -28,6 +28,7 @@ exports.addOne = (
   grape11,
   grape21,
   grape31,
+  grape41,
   grapes1,
   year1,
   place1,
@@ -44,6 +45,10 @@ exports.addOne = (
   description81,
   description91,
   description101,
+  description111,
+  description121,
+  description131,
+  description141,
   funfact1,
   timestamp1,
   price1,
@@ -52,7 +57,8 @@ exports.addOne = (
 
   color1,
   status1,
-  picture1
+  picture1,
+  coravin1
 ) => {
   return Wines.create(
     {
@@ -62,6 +68,7 @@ exports.addOne = (
       grape2: grape21,
       grape3: grape31,
       grapes: grapes1,
+      grape4: grape41,
       year: year1,
       place: place1,
       area: area1,
@@ -77,6 +84,10 @@ exports.addOne = (
       description8: description81,
       description9: description91,
       description10: description101,
+      description11: description111,
+      description12: description121,
+      description13: description131,
+      description14: description141,
       funfact: funfact1,
       timestamp: timestamp1,
       price: price1,
@@ -85,7 +96,8 @@ exports.addOne = (
       color: color1,
       status: status1,
       lastUpadted: lastUpdated1,
-      picture: picture1
+      picture: picture1,
+      coravin: coravin1
     },
     (err, result) => {
       if (err) throw err;

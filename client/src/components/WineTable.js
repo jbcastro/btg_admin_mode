@@ -18,6 +18,7 @@ const WineTable = props => {
   const onClick = props.onClick;
   const clickMe = props.clickMe;
   const showMyComponent = props.showMyComponent;
+  const handleNextClick = props.handleNextClick;
   const grapes = "grapes";
   const year = "year";
   const place = "place";
@@ -70,6 +71,7 @@ const WineTable = props => {
     <Paper className={classes.root}>
       <ButtonBase onClick={onClear}>Clear Filters</ButtonBase>
       <p></p>
+
       <ButtonBase onClick={showAddForm}>Show/hide Add Form</ButtonBase>
       <Table className={classes.table}>
         <TableHead className={classes.head}>

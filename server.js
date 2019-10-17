@@ -104,6 +104,7 @@ app.post("/express_backend/add", (req, res) => {
         grape1: req.body.grape1,
         grape2: req.body.grape2,
         grape3: req.body.grape3,
+        grape4: req.body.grape4,
         grapes: req.body.grapes,
         year: req.body.year,
         place: req.body.place,
@@ -120,6 +121,10 @@ app.post("/express_backend/add", (req, res) => {
         description8: req.body.description8,
         description9: req.body.description9,
         description10: req.body.description10,
+        description11: req.body.description11,
+        description12: req.body.description12,
+        description13: req.body.description13,
+        description14: req.body.description14,
 
         funfact: req.body.funfact,
         price: req.body.price,
@@ -128,7 +133,8 @@ app.post("/express_backend/add", (req, res) => {
 
         color: req.body.color,
         status: req.body.status,
-        picture: req.body.picture
+        picture: req.body.picture,
+        coravin: req.body.coravin
       },
       (err, result) => {
         if (err) return next(err);
