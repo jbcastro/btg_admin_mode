@@ -198,23 +198,14 @@ class App extends Component {
     let index = glasses.indexOf(curItem);
     let nextIndex = index + 1;
 
-    glasses.map(result => {
-      if (glasses.indexOf(result) === nextIndex) {
-        this.setState({ curItem: result });
-      }
-    });
+    this.setState({ curItem: glasses[nextIndex] });
   };
   handlePrevClick = () => {
     let curItem = this.state.curItem;
     const glasses = this.state.unFilteredWines;
     let index = glasses.indexOf(curItem);
     let nextIndex = index - 1;
-
-    glasses.map(result => {
-      if (glasses.indexOf(result) === nextIndex) {
-        this.setState({ curItem: result });
-      }
-    });
+    this.setState({ curItem: glasses[nextIndex] });
   };
 
   ///render portion
