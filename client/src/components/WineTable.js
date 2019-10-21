@@ -184,7 +184,7 @@ const WineTable = props => {
                 >
                   {glass.grape1}
                 </ButtonBase>
-                &nbsp;
+                <p></p>
                 <ButtonBase
                   className={classes.button}
                   id={glass.grape2}
@@ -193,7 +193,7 @@ const WineTable = props => {
                 >
                   {glass.grape2}
                 </ButtonBase>
-                &nbsp;
+                <p></p>
                 <ButtonBase
                   className={classes.button}
                   id={glass.grape3}
