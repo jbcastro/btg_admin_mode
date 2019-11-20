@@ -370,7 +370,7 @@ const AddEditForm = props => {
             <MenuItem value={"red"}>red</MenuItem>
             <MenuItem value={"white"}>white</MenuItem>
             <MenuItem value={"dessert"}>dessert</MenuItem>
-            <MenuItem value={"corovan"}>corovan</MenuItem>
+
             <MenuItem value={"sparkling"}>sparkling</MenuItem>
           </Select>
         </FormControl>
