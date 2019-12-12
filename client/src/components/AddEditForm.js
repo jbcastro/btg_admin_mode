@@ -63,7 +63,6 @@ const AddEditForm = props => {
     <div>
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
-          required
           fullWidth
           multiline
           label="Name"
@@ -76,7 +75,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Vinyard"
           className={classes.textField}
           type="text"
@@ -87,7 +85,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Grapes"
           type="text"
           name="grapes"
@@ -97,7 +94,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Grape 1"
           type="text"
           name="grape1"
@@ -134,7 +130,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Year"
           type="text"
           name="year"
@@ -144,7 +139,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Place"
           type="text"
           name="place"
@@ -163,7 +157,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Country"
           type="text"
           name="country"
@@ -173,7 +166,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Appellation"
           type="text"
           name="appellation"
@@ -183,7 +175,6 @@ const AddEditForm = props => {
           margin="normal"
         />
         <TextField
-          required
           label="Description1"
           type="text"
           name="description1"
@@ -324,7 +315,7 @@ const AddEditForm = props => {
             Mise
           </InputLabel>
           <Select
-            value={props.curItem.mise}
+            value={props.curItem.mise || ""}
             onChange={onChange}
             inputProps={{
               name: "mise",
@@ -344,7 +335,7 @@ const AddEditForm = props => {
             Corvin
           </InputLabel>
           <Select
-            value={props.curItem.coravin}
+            value={props.curItem.coravin || ""}
             onChange={onChange}
             inputProps={{
               name: "coravin",
@@ -360,7 +351,7 @@ const AddEditForm = props => {
             Color
           </InputLabel>{" "}
           <Select
-            value={props.curItem.color}
+            value={props.curItem.color || ""}
             onChange={onChange}
             inputProps={{
               name: "color",
@@ -380,7 +371,7 @@ const AddEditForm = props => {
             Status
           </InputLabel>
           <Select
-            value={props.curItem.status}
+            value={props.curItem.status || ""}
             onChange={onChange}
             inputProps={{
               name: "status",

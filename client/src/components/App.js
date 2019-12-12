@@ -15,13 +15,13 @@ class App extends Component {
       unFilteredWines: [],
 
       showMyComponent: false,
-      addFormHidden: true
+      addFormHidden: false
     };
     this.handleSelect = this.handleSelect.bind(this);
-
     this.handleOnClick = this.handleOnClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+
     this.onSelect = this.onSelect.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onClear = this.onClear.bind(this);
@@ -123,9 +123,9 @@ class App extends Component {
   onChange = event => {
     var newItem = this.state.curItem;
     newItem[event.target.name] = event.target.value;
-
     this.setState({ curItem: newItem });
   };
+
   //filter to just wines that have the features ie certain grapes, area, etc
   onSelect = event => {
     let value = event.target.value.toLowerCase();
