@@ -15,7 +15,8 @@ class App extends Component {
       unFilteredWines: [],
 
       showMyComponent: false,
-      addFormHidden: true
+      addFormHidden: false,
+      noob: true
     };
     this.handleSelect = this.handleSelect.bind(this);
 
@@ -65,7 +66,8 @@ class App extends Component {
 
     glasses.map(result => {
       if (result._id === id) {
-        return this.setState({ curItem: result });
+        this.setState({ curItem: result });
+        this.setState({ noob: false });
       }
     });
   };
