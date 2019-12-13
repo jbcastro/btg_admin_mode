@@ -8,6 +8,7 @@
     "create-react-app": "^3.2.0",
     "date-fns": "^2.5.1",
     "express": "^4.17.1",
+    "install": "^0.13.0",
     "material-table": "^1.52.0",
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.6",
