@@ -12,7 +12,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Icon from "@material-ui/core/Icon";
 
 const WineTable = props => {
-  const handleOnClick = props.handleOnClick;
+  const handleDelete = props.handleDelete;
   const handleSelect = props.handleSelect;
   const onSelect = props.onSelect;
   const onClick = props.onClick;
@@ -428,7 +428,7 @@ const WineTable = props => {
         variant="contained"
         color="secondary"
         className={classes.delete}
-        onClick={handleOnClick}
+        onClick={handleDelete}
       >
         delete
       </Button>

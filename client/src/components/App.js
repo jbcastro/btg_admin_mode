@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./styles/App.css";
 import WineTable from "./WineTable";
 import AddEditForm from "./AddEditForm";
+import AddForm from "./AddForm";
+import MobileBlocksData from "./MobileBlocksData";
 
 class App extends Component {
   constructor(props) {
@@ -15,15 +17,14 @@ class App extends Component {
       unFilteredWines: [],
 
       showMyComponent: false,
-      addFormHidden: false,
-      noob: true
+      addFormHidden: false
     };
     this.handleSelect = this.handleSelect.bind(this);
 
-    this.handleOnClick = this.handleOnClick.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.onSelect = this.onSelect.bind(this);
+    // this.onSelect = this.onSelect.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onClear = this.onClear.bind(this);
     this.onCurItemClear = this.onCurItemClear.bind(this);
@@ -67,13 +68,12 @@ class App extends Component {
     glasses.map(result => {
       if (result._id === id) {
         this.setState({ curItem: result });
-        this.setState({ noob: false });
       }
     });
   };
 
   //delete item
-  handleOnClick = () => {
+  handleDelete = () => {
     let id = this.state.curItem._id;
 
     fetch(`http://localhost:5000/express_backend/delete?_id=${id}`)
@@ -89,9 +89,9 @@ class App extends Component {
   };
 
   //for adding and updating
-  handleSubmit() {
-    let name = this.state.curItem.name;
-    let newWine = this.state.curItem;
+  handleSubmit = e => {
+    let name = e.name;
+    let newWine = e;
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -107,7 +107,7 @@ class App extends Component {
           glassesArray = this.state.glasses;
 
           newWine._id = json._id;
-          glassesArray.push(newWine);
+          glassesArray.unshift(newWine);
           this.setState({ glasses: glassesArray });
         } else {
           glassesArray = this.state.glasses.map(item => {
@@ -119,7 +119,7 @@ class App extends Component {
         }
         this.setState({ glasses: glassesArray });
       });
-  }
+  };
 
   //making whatever is typed in as current item
   onChange = event => {
@@ -129,56 +129,56 @@ class App extends Component {
     this.setState({ curItem: newItem });
   };
   //filter to just wines that have the features ie certain grapes, area, etc
-  onSelect = event => {
-    let value = event.target.value.toLowerCase();
-    const id = event.target.id;
+  // onSelect = event => {
+  //   let value = event.target.value.toLowerCase();
+  //   const id = event.target.id;
 
-    // if(value==!null){
-    //   return value.toLowerCase()
-    // }
-    const glasses = this.state.glasses;
+  //   // if(value==!null){
+  //   //   return value.toLowerCase()
+  //   // }
+  //   const glasses = this.state.glasses;
 
-    var grapes = glasses.filter(result => {
-      if (value === "grapes") {
-        return result.grapes === id;
-      } else if (value === "grape") {
-        return (
-          result.grape1 === id || result.grape2 === id || result.grape3 === id
-        );
-      } else if (value === "vinyard") {
-        return result.vinyard === id;
-      } else if (value === "year") {
-        return result.year === id;
-      } else if (value === "place") {
-        return result.place === id;
-      } else if (value === "area") {
-        return result.area === id;
-      } else if (value === "country") {
-        return result.country === id;
-      } else if (value === "appellation") {
-        return result.appellation === id;
-      } else if (value === "place") {
-        return result.place === id;
-      } else if (value === "description") {
-        return (
-          result.description1 === id ||
-          result.description2 === id ||
-          result.description3 === id ||
-          result.description4 === id ||
-          result.description5 === id ||
-          result.description6 === id ||
-          result.description7 === id ||
-          result.description8 === id ||
-          result.description9 === id ||
-          result.description10 === id
-        );
-      } else {
-        return result.color === id;
-      }
-    });
+  //   var grapes = glasses.filter(result => {
+  //     if (value === "grapes") {
+  //       return result.grapes === id;
+  //     } else if (value === "grape") {
+  //       return (
+  //         result.grape1 === id || result.grape2 === id || result.grape3 === id
+  //       );
+  //     } else if (value === "vinyard") {
+  //       return result.vinyard === id;
+  //     } else if (value === "year") {
+  //       return result.year === id;
+  //     } else if (value === "place") {
+  //       return result.place === id;
+  //     } else if (value === "area") {
+  //       return result.area === id;
+  //     } else if (value === "country") {
+  //       return result.country === id;
+  //     } else if (value === "appellation") {
+  //       return result.appellation === id;
+  //     } else if (value === "place") {
+  //       return result.place === id;
+  //     } else if (value === "description") {
+  //       return (
+  //         result.description1 === id ||
+  //         result.description2 === id ||
+  //         result.description3 === id ||
+  //         result.description4 === id ||
+  //         result.description5 === id ||
+  //         result.description6 === id ||
+  //         result.description7 === id ||
+  //         result.description8 === id ||
+  //         result.description9 === id ||
+  //         result.description10 === id
+  //       );
+  //     } else {
+  //       return result.color === id;
+  //     }
+  //   });
 
-    this.setState({ glasses: grapes });
-  };
+  //   this.setState({ glasses: grapes });
+  // };
 
   onClick = () => {
     this.setState(state => ({ showMyComponent: !this.state.showMyComponent }));
@@ -218,53 +218,42 @@ class App extends Component {
   //
 
   render() {
-    if (!this.state.addFormHidden) {
-      return (
-        <div className="App">
-          <h1>Admin Mode</h1>
-
+    return (
+      <div className="App">
+        <h1>Admin Mode</h1>
+        <AddForm
+          handleSubmit={this.handleSubmit}
+          curItem={this.state.curItem}
+          onChange={this.onChange}
+          handleDelete={this.handleDelete}
+          onCurItemClear={this.onCurItemClear}
+          handleNextClick={this.handleNextClick}
+          handlePrevClick={this.handlePrevClick}
+          glasses={this.state.glasses}
+        />
+        {/* 
           <AddEditForm
             handleSubmit={this.handleSubmit}
             curItem={this.state.curItem}
             onChange={this.onChange}
-            handleOnClick={this.handleOnClick}
+            handleDelete={this.handleDelete}
             onCurItemClear={this.onCurItemClear}
             handleNextClick={this.handleNextClick}
             handlePrevClick={this.handlePrevClick}
             glasses={this.state.glasses}
-          />
-          <WineTable
-            glasses={this.state.glasses}
-            handleSelect={this.handleSelect}
-            wines={this.state.filteredWines}
-            match={this.props.match}
-            onSelect={this.onSelect}
-            onClick={this.onClick}
-            showMyComponent={this.state.showMyComponent}
-            onClear={this.onClear}
-            showAddForm={this.showAddForm}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <div className="App">
-          <h1>Admin Mode</h1>
+          /> */}
 
-          <WineTable
-            glasses={this.state.glasses}
-            handleSelect={this.handleSelect}
-            wines={this.state.filteredWines}
-            match={this.props.match}
-            onSelect={this.onSelect}
-            onClick={this.onClick}
-            showMyComponent={this.state.showMyComponent}
-            onClear={this.onClear}
-            showAddForm={this.showAddForm}
-          />
-        </div>
-      );
-    }
+        <MobileBlocksData
+          glasses={this.state.glasses}
+          wines={this.state.filteredWines}
+          onSelect={this.onSelect}
+          onClear={this.onClear}
+          curItem={this.state.curItem}
+          mappedGlasses={this.state.mappedGlasses}
+          handleSelect={this.handleSelect}
+        />
+      </div>
+    );
   }
 }
 

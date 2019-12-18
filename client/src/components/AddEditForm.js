@@ -13,7 +13,7 @@ import ButtonBase from "@material-ui/core/ButtonBase";
 const AddEditForm = props => {
   const handleSubmit = props.handleSubmit;
 
-  const handleOnClick = props.handleOnClick;
+  const handleDelete = props.handleDelete;
 
   const onChange = props.onChange;
 
