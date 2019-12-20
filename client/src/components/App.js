@@ -17,12 +17,14 @@ class App extends Component {
       unFilteredWines: [],
 
       showMyComponent: false,
-      addFormHidden: false
+      addFormHidden: false,
+      editCard: false
     };
     this.handleSelect = this.handleSelect.bind(this);
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     // this.onSelect = this.onSelect.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -31,6 +33,7 @@ class App extends Component {
     this.showAddForm = this.showAddForm.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handlePrevClick = this.handlePrevClick.bind(this);
+    this.editCardChange = this.editCardChange.bind(this);
   }
 
   componentDidMount() {
@@ -120,6 +123,38 @@ class App extends Component {
         this.setState({ glasses: glassesArray });
       });
   };
+  handleUpdate() {
+    let name = this.state.curItem.name;
+    let newWine = this.state.curItem;
+    fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newWine)
+    })
+      .then(res => res.json())
+      .then(json => {
+        let glassesArray;
+        if (!newWine._id) {
+          glassesArray = this.state.glasses;
+
+          newWine._id = json._id;
+          glassesArray.push(newWine);
+          this.setState({ glasses: glassesArray });
+        } else {
+          glassesArray = this.state.glasses.map(item => {
+            if (item._id === newWine._id) {
+              item = newWine;
+            }
+            return item;
+          });
+        }
+        this.setState({ glasses: glassesArray });
+        this.setState({ curItem: {} });
+      });
+  }
 
   //making whatever is typed in as current item
   onChange = event => {
@@ -209,6 +244,9 @@ class App extends Component {
     let nextIndex = index - 1;
     this.setState({ curItem: glasses[nextIndex] });
   };
+  editCardChange = () => {
+    this.setState(state => ({ editCard: !this.state.editCard }));
+  };
 
   ///render portion
 
@@ -251,6 +289,11 @@ class App extends Component {
           curItem={this.state.curItem}
           mappedGlasses={this.state.mappedGlasses}
           handleSelect={this.handleSelect}
+          editCardChange={this.editCardChange}
+          editCard={this.state.editCard}
+          onChange={this.onChange}
+          curItem={this.state.curItem}
+          handleUpdate={this.handleUpdate}
         />
       </div>
     );
