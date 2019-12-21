@@ -370,9 +370,6 @@ const MobileBlocks = ({
               {data.status} {data.appellation}
               Grapes:{data.grape[0]} {data.grape[1]} {data.grape[2]}{" "}
               {data.grape[3]}
-              <span className={classes.lister}>
-                Desc: {descList(data.description)}
-              </span>
             </Typography>
           </span>
         )}
@@ -399,6 +396,9 @@ const MobileBlocks = ({
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
+          <span className={classes.lister}>
+            Desc: {descList(data.description)}
+          </span>
           <Typography paragraph>Fun Fact: {data.funfact}</Typography>
         </CardContent>
       </Collapse>
