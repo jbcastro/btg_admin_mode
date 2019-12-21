@@ -14,6 +14,7 @@
     "material-table": "^1.52.0",
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.6",
+    "npm-update-all": "^1.0.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-scripts": "^3.3.0",
