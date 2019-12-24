@@ -123,9 +123,9 @@ class App extends Component {
         this.setState({ glasses: glassesArray });
       });
   };
-  handleUpdate() {
-    let name = this.state.curItem.name;
-    let newWine = this.state.curItem;
+  handleUpdate = e => {
+    let name = e.name;
+    let newWine = e;
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -154,7 +154,7 @@ class App extends Component {
         this.setState({ glasses: glassesArray });
         this.setState({ curItem: {} });
       });
-  }
+  };
 
   //making whatever is typed in as current item
   onChange = event => {
@@ -269,6 +269,7 @@ class App extends Component {
           handlePrevClick={this.handlePrevClick}
           glasses={this.state.glasses}
         />
+
         {/* 
           <AddEditForm
             handleSubmit={this.handleSubmit}
@@ -280,7 +281,6 @@ class App extends Component {
             handlePrevClick={this.handlePrevClick}
             glasses={this.state.glasses}
           /> */}
-
         <MobileBlocksData
           glasses={this.state.glasses}
           wines={this.state.filteredWines}

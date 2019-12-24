@@ -10,6 +10,7 @@ const MobileBlocksData = ({
   editCard,
   curItem,
   onChange,
+  handleSubmit,
   handleUpdate
 }) => {
   const data = glasses;
@@ -27,6 +28,7 @@ const MobileBlocksData = ({
         onChange={onChange}
         curItem={curItem}
         handleUpdate={handleUpdate}
+        handleSubmit={handleSubmit}
       />
     );
   });
