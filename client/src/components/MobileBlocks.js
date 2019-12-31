@@ -132,7 +132,8 @@ const MobileBlocks = ({
   curItem,
   onChange,
   handleSubmit,
-  handleUpdate
+  handleUpdate,
+  handleDelete
 }) => {
   // butt = data;
   // const onSelect = props.onSelect;
@@ -207,7 +208,14 @@ const MobileBlocks = ({
       return <ul>{listResult}</ul>;
     }
   };
-
+  
+function checkIfNull(data){
+  if(data != null){
+    return data
+  }else{
+     return 
+  }
+}
   //span
   let curItemId = curItem._id;
 
@@ -270,25 +278,49 @@ const MobileBlocks = ({
   };
   const ComponentUsingFormState = () => {
     const formState = useFormState();
+    
+    
     return (
       <div>
         <ButtonBase
           className={classes.ButtonBase}
-          onClick={e => handleUpdate(formState.values)}
+          onClick={e => handleUpdate(formState.values,formState.initialValue)}
         >
           Save
         </ButtonBase>
+         <label>Values:</label>
+      {/* <code>
+        {JSON.stringify(formState.values)}
+      </code> */}
+      <label>Touched:</label>
+      <code>
+        {JSON.stringify(formState.touched)}
+      </code>
+      
       </div>
     );
   };
 
   return (
+    
     <Card className={checkStatus(data.status)} key={data._id} raised>
       <CardHeader title={data.name} />
 
       <span>
         {checkIfCurItem(data._id) ? (
+          
+        //   <span>
+        //     <form>
+        //       Name:<input type="text" name="name"  value={data.name}></input>
+        //       Grape1:<input type="text" name="grape[0]"  value={data.grape[0]}></input>
+        //       Grape2:<input type="text" name="grape[1]"  value={data.grape[1]}></input>
+        //       Grape3:<input type="text" name="grape[2]"  value={data.grape[2]}></input>
+        //       Grape4:<input type="text" name="grape[3]"  value={data.grape[3]}></input>
+        //       </form>
+        //       <button onClick={e=>handleSubmit(e)}></button>
+        //  </span>
           <span>
+            <button onClick={e=>handleDelete(e._id)}>Delete?</button>
             <br></br>
             <Form id="form-api-form">
               {({ formApi }) => (
@@ -301,7 +333,7 @@ const MobileBlocks = ({
                       field="name"
                       // disabled={editCard}
                       initialValue={data.name}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -312,9 +344,10 @@ const MobileBlocks = ({
                       field="vinyard"
                       // disabled={editCard}
                       initialValue={data.vinyard}
-                      onChange={onChange}
+                      touchOnChange= {true}
                     ></Text>
                   </label>
+                  
                   <label>
                     <font size="1">id:</font>
                     <Text
@@ -322,7 +355,7 @@ const MobileBlocks = ({
                       field="_id"
                       disabled={true}
                       initialValue={data._id}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -333,7 +366,7 @@ const MobileBlocks = ({
                       field="grapes"
                       // disabled={editCard}
                       initialValue={data.grapes}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -346,7 +379,7 @@ const MobileBlocks = ({
                         multiple={true}
                         field={grapezz[i]}
                         className={classes.text}
-                        onChange={onChange}
+                        
                         initialValue={result[i]}
                       />
                     </label>
@@ -358,8 +391,8 @@ const MobileBlocks = ({
                       className={classes.text}
                       field="grape[0]"
                       // disabled={editCard}
-                      initialValue={data.grape[0]}
-                      onChange={onChange}
+                      initialValue={checkIfNull(data.grape[0])}
+                      // 
                     ></Text>
                   </label>
 
@@ -370,8 +403,8 @@ const MobileBlocks = ({
                       className={classes.text}
                       field="grape[1]"
                       // disabled={editCard}
-                      initialValue={data.grape[1]}
-                      onChange={onChange}
+                      initialValue={checkIfNull(data.grape[1])}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -381,8 +414,8 @@ const MobileBlocks = ({
                       className={classes.text}
                       field="grape[2]"
                       // disabled={editCard}
-                      initialValue={data.grape[2]}
-                      onChange={onChange}
+                      initialValue={checkIfNull(data.grape[2])}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -392,8 +425,9 @@ const MobileBlocks = ({
                       className={classes.text}
                       field="grape[3]"
                       // disabled={editCard}
-                      initialValue={data.grape[3]}
-                      onChange={onChange}
+                      initialValue={checkIfNull(data.grape[3])}
+                      
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -407,7 +441,7 @@ const MobileBlocks = ({
                       type="number"
                       // disabled={editCard}
                       initialValue={data.year}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -418,7 +452,7 @@ const MobileBlocks = ({
                       field="place"
                       // disabled={editCard}
                       initialValue={data.place}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -429,7 +463,7 @@ const MobileBlocks = ({
                       field="area"
                       // disabled={editCard}
                       initialValue={data.area}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -440,7 +474,7 @@ const MobileBlocks = ({
                       field="country"
                       // disabled={editCard}
                       initialValue={data.country}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -451,7 +485,7 @@ const MobileBlocks = ({
                       field="appellation"
                       // disabled={editCard}
                       initialValue={data.appellation}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
                   <br></br>
@@ -463,14 +497,14 @@ const MobileBlocks = ({
                       type="number"
                       // disabled={editCard}
                       initialValue={data.price}
-                      onChange={onChange}
+                      
                     ></Text>
                   </label>
 
                   <br></br>
                   <label>
                     Status:
-                    <Select field="status" onChange={onChange}>
+                    <Select field="status" >
                       <Option value="">{data.status}</Option>
                       <Option value="none">None</Option>
                       <Option value="added">Added</Option>
@@ -481,7 +515,7 @@ const MobileBlocks = ({
                   <br></br>
                   <label>
                     Mise:
-                    <Select field="mise" onChange={onChange}>
+                    <Select field="mise" >
                       <Option value="">{data.mise}</Option>
                       <Option value="ap">AP</Option>
                       <Option value="burg">BURG</Option>
@@ -505,14 +539,14 @@ const MobileBlocks = ({
                   </CardActions>
                   <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                      <label>
+                      {/* <label>
                         <font size="1">Description 1:</font>
                         <Text
                           className={classes.text}
                           field="description[0]"
                           // disabled={editCard}
-                          initialValue={data.description[0]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[0])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -522,8 +556,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[1]"
                           // disabled={editCard}
-                          initialValue={data.description[1]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[1])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -533,8 +567,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[2]"
                           // disabled={editCard}
-                          initialValue={data.description[2]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[2])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -544,8 +578,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[3]"
                           // disabled={editCard}
-                          initialValue={data.description[3]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[3])}
+                          
                         ></Text>
                       </label>
 
@@ -555,8 +589,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[4]"
                           // disabled={editCard}
-                          initialValue={data.description[4]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[4])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -566,8 +600,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[5]"
                           // disabled={editCard}
-                          initialValue={data.description[5]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[5])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -577,8 +611,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[6]"
                           // disabled={editCard}
-                          initialValue={data.description[6]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[6])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -588,8 +622,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[7]"
                           // disabled={editCard}
-                          initialValue={data.description[7]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[7])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -599,8 +633,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[8]"
                           // disabled={editCard}
-                          initialValue={data.description[8]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[8])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -610,8 +644,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[9]"
                           // disabled={editCard}
-                          initialValue={data.description[9]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[9])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -621,8 +655,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[10]"
                           // disabled={editCard}
-                          initialValue={data.description[10]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[10])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -632,8 +666,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[11]"
                           // disabled={editCard}
-                          initialValue={data.description[11]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[11])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -643,8 +677,8 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[12]"
                           // disabled={editCard}
-                          initialValue={data.description[12]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[12])}
+                          
                         ></Text>
                       </label>
                       <br></br>
@@ -654,10 +688,10 @@ const MobileBlocks = ({
                           className={classes.text}
                           field="description[13]"
                           // disabled={editCard}
-                          initialValue={data.description[13]}
-                          onChange={onChange}
+                          initialValue={checkIfNull(data.description[13])}
+                          
                         ></Text>
-                      </label>
+                      </label> */}
 
                       <br></br>
                       <label>
@@ -667,7 +701,7 @@ const MobileBlocks = ({
                           field="funfact"
                           // disabled={editCard}
                           initialValue={data.funfact}
-                          onChange={onChange}
+                          
                         ></TextArea>
                       </label>
                     </CardContent>
@@ -678,6 +712,8 @@ const MobileBlocks = ({
           </span>
         ) : (
           <span>
+                        <button onClick={e=>handleDelete(data)}>Delete?</button>
+
             <ButtonBase
               className={classes.ButtonBase}
               id={data._id}

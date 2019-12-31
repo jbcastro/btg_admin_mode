@@ -76,8 +76,8 @@ class App extends Component {
   };
 
   //delete item
-  handleDelete = () => {
-    let id = this.state.curItem._id;
+  handleDelete = (e) => {
+   let id = e._id
 
     fetch(`http://localhost:5000/express_backend/delete?_id=${id}`)
       .then(response => {
@@ -87,7 +87,7 @@ class App extends Component {
         const remainder = this.state.glasses.filter(item => {
           return item._id !== id;
         });
-        this.setState({ glasses: remainder, curItem: {} });
+        this.setState({ glasses: remainder, e: {} });
       });
   };
 
@@ -95,6 +95,9 @@ class App extends Component {
   handleSubmit = e => {
     let name = e.name;
     let newWine = e;
+    let glassesArray;
+    
+    
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -123,9 +126,12 @@ class App extends Component {
         this.setState({ glasses: glassesArray });
       });
   };
-  handleUpdate = e => {
+  handleUpdate=(e)=>{
     let name = e.name;
     let newWine = e;
+    console.log(e)
+    // let vinny = e.formState.touched
+    // console.log(vinny)
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -137,20 +143,14 @@ class App extends Component {
       .then(res => res.json())
       .then(json => {
         let glassesArray;
-        if (!newWine._id) {
-          glassesArray = this.state.glasses;
-
-          newWine._id = json._id;
-          glassesArray.push(newWine);
-          this.setState({ glasses: glassesArray });
-        } else {
+        
           glassesArray = this.state.glasses.map(item => {
             if (item._id === newWine._id) {
               item = newWine;
             }
             return item;
           });
-        }
+        
         this.setState({ glasses: glassesArray });
         this.setState({ curItem: {} });
       });
@@ -292,8 +292,9 @@ class App extends Component {
           editCardChange={this.editCardChange}
           editCard={this.state.editCard}
           onChange={this.onChange}
-          curItem={this.state.curItem}
+          handleSubmit={this.handleSubmit}
           handleUpdate={this.handleUpdate}
+          handleDelete={this.handleDelete}
         />
       </div>
     );

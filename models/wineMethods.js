@@ -49,7 +49,7 @@ exports.addOne = (
     {
       vinyard: vinyard1,
       name: name1,
-      grape:grapes1,
+      grape:grape1,
       grapes: grapes1,
       year: year1,
       place: place1,
