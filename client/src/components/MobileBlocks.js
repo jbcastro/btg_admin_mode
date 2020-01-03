@@ -15,6 +15,7 @@ import ButtonBase from "@material-ui/core/ButtonBase";
 import CardMedia from "@material-ui/core/CardMedia";
 import { string } from "prop-types";
 import { PromiseProvider } from "mongoose";
+
 import {
   Form,
   Text,
@@ -25,7 +26,8 @@ import {
   Select,
   Option,
   Scope,
-  useFormState
+  useFormState,
+  useArrayField
 } from "informed";
 import { Button, createMuiTheme, Hidden } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
@@ -114,8 +116,8 @@ const useStyles = makeStyles(theme => ({
   },
 
   lister: {
-    listStyleType: "none",
     display: "inline"
+    // list-style-type: "circle"
   },
   paragraph: {
     clear: "both"
@@ -133,7 +135,8 @@ const MobileBlocks = ({
   onChange,
   handleSubmit,
   handleUpdate,
-  handleDelete
+  handleDelete,
+  onCurItemClear
 }) => {
   // butt = data;
   // const onSelect = props.onSelect;
@@ -200,22 +203,20 @@ const MobileBlocks = ({
       return classes.buttonHidden;
     }
   }
-  const descGrapeList = list => {
-    if (list === !null) {
-      const listResult = list.map((result, index) => (
-        <li key={index}>{result}</li>
-      ));
-      return <ul>{listResult}</ul>;
+  // function descGrapeList(list) {
+  //   const listResult = list.map((result, index) => (
+  //     <li key={index}>{result}</li>
+  //   ));
+  //   return <ul>{listResult}</ul>;
+  // }
+
+  function checkIfNull(data) {
+    if (data != null) {
+      return data;
+    } else {
+      return;
     }
-  };
-  
-function checkIfNull(data){
-  if(data != null){
-    return data
-  }else{
-     return 
   }
-}
   //span
   let curItemId = curItem._id;
 
@@ -276,53 +277,63 @@ function checkIfNull(data){
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const Grapes = () => {
+    const { add, fields } = useArrayField({ field: "grape" });
+    return (
+      <React.Fragment>
+        <button onClick={add} type="button">
+          Add Grape
+        </button>
+        {fields.map(({ field, key, remove }, i) => (
+          <label key={key}>
+            <p></p>
+            Grape {i}:
+            <Text field={field} />
+            <button type="button" onClick={remove}>
+              Remove
+            </button>
+          </label>
+        ))}
+      </React.Fragment>
+    );
+  };
   const ComponentUsingFormState = () => {
     const formState = useFormState();
-    
-    
+
     return (
       <div>
         <ButtonBase
           className={classes.ButtonBase}
-          onClick={e => handleUpdate(formState.values,formState.initialValue)}
+          onClick={e => handleUpdate(formState.values)}
         >
           Save
         </ButtonBase>
-         <label>Values:</label>
-      {/* <code>
-        {JSON.stringify(formState.values)}
-      </code> */}
-      <label>Touched:</label>
-      <code>
-        {JSON.stringify(formState.touched)}
-      </code>
-      
       </div>
     );
   };
 
   return (
-    
     <Card className={checkStatus(data.status)} key={data._id} raised>
       <CardHeader title={data.name} />
 
       <span>
         {checkIfCurItem(data._id) ? (
-          
-        //   <span>
-        //     <form>
-        //       Name:<input type="text" name="name"  value={data.name}></input>
-        //       Grape1:<input type="text" name="grape[0]"  value={data.grape[0]}></input>
-        //       Grape2:<input type="text" name="grape[1]"  value={data.grape[1]}></input>
-        //       Grape3:<input type="text" name="grape[2]"  value={data.grape[2]}></input>
-        //       Grape4:<input type="text" name="grape[3]"  value={data.grape[3]}></input>
-        //       </form>
-        //       <button onClick={e=>handleSubmit(e)}></button>
-        //  </span>
+          //   <span>
+          //     <form>
+          //       Name:<input type="text" name="name"  value={data.name}></input>
+          //       Grape1:<input type="text" name="grape[0]"  value={data.grape[0]}></input>
+          //       Grape2:<input type="text" name="grape[1]"  value={data.grape[1]}></input>
+          //       Grape3:<input type="text" name="grape[2]"  value={data.grape[2]}></input>
+          //       Grape4:<input type="text" name="grape[3]"  value={data.grape[3]}></input>
+          //       </form>
+          //       <button onClick={e=>handleSubmit(e)}></button>
+          //  </span>
           <span>
-            <button onClick={e=>handleDelete(e._id)}>Delete?</button>
+            <button onClick={e => handleDelete(e._id)}>Delete?</button>
             <br></br>
-            <Form id="form-api-form">
+            <br></br>
+
+            <Form id="form-api-form" initialValues={{ grape: data.grape }}>
               {({ formApi }) => (
                 <div>
                   <ComponentUsingFormState />
@@ -333,7 +344,6 @@ function checkIfNull(data){
                       field="name"
                       // disabled={editCard}
                       initialValue={data.name}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -344,10 +354,9 @@ function checkIfNull(data){
                       field="vinyard"
                       // disabled={editCard}
                       initialValue={data.vinyard}
-                      touchOnChange= {true}
                     ></Text>
                   </label>
-                  
+
                   <label>
                     <font size="1">id:</font>
                     <Text
@@ -355,7 +364,6 @@ function checkIfNull(data){
                       field="_id"
                       disabled={true}
                       initialValue={data._id}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -365,13 +373,14 @@ function checkIfNull(data){
                       className={classes.text}
                       field="grapes"
                       // disabled={editCard}
-                      initialValue={data.grapes}
-                      
+                      initialValue={checkIfNull(data.grapes)}
                     ></Text>
                   </label>
                   <br></br>
 
                   {/* start of grapes */}
+                  <Grapes />
+
                   {/* {data.grape.map(({ field, key }, i, result) => (
                     <label key={key}>
                       <br></br> Grape {i}:
@@ -379,20 +388,19 @@ function checkIfNull(data){
                         multiple={true}
                         field={grapezz[i]}
                         className={classes.text}
-                        
                         initialValue={result[i]}
                       />
                     </label>
                   ))} */}
 
-                  <label>
+                  {/* <label>
                     <font size="1">Indiv Grape1:</font>
                     <Text
                       className={classes.text}
                       field="grape[0]"
                       // disabled={editCard}
                       initialValue={checkIfNull(data.grape[0])}
-                      // 
+                      //
                     ></Text>
                   </label>
 
@@ -404,7 +412,6 @@ function checkIfNull(data){
                       field="grape[1]"
                       // disabled={editCard}
                       initialValue={checkIfNull(data.grape[1])}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -415,7 +422,6 @@ function checkIfNull(data){
                       field="grape[2]"
                       // disabled={editCard}
                       initialValue={checkIfNull(data.grape[2])}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -426,11 +432,9 @@ function checkIfNull(data){
                       field="grape[3]"
                       // disabled={editCard}
                       initialValue={checkIfNull(data.grape[3])}
-                      
-                      
                     ></Text>
                   </label>
-                  <br></br>
+                  <br></br> */}
 
                   {/* end of grapes */}
                   <label>
@@ -441,7 +445,6 @@ function checkIfNull(data){
                       type="number"
                       // disabled={editCard}
                       initialValue={data.year}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -452,7 +455,6 @@ function checkIfNull(data){
                       field="place"
                       // disabled={editCard}
                       initialValue={data.place}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -463,7 +465,6 @@ function checkIfNull(data){
                       field="area"
                       // disabled={editCard}
                       initialValue={data.area}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -474,7 +475,6 @@ function checkIfNull(data){
                       field="country"
                       // disabled={editCard}
                       initialValue={data.country}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -485,7 +485,6 @@ function checkIfNull(data){
                       field="appellation"
                       // disabled={editCard}
                       initialValue={data.appellation}
-                      
                     ></Text>
                   </label>
                   <br></br>
@@ -497,14 +496,13 @@ function checkIfNull(data){
                       type="number"
                       // disabled={editCard}
                       initialValue={data.price}
-                      
                     ></Text>
                   </label>
 
                   <br></br>
                   <label>
                     Status:
-                    <Select field="status" >
+                    <Select field="status">
                       <Option value="">{data.status}</Option>
                       <Option value="none">None</Option>
                       <Option value="added">Added</Option>
@@ -515,7 +513,7 @@ function checkIfNull(data){
                   <br></br>
                   <label>
                     Mise:
-                    <Select field="mise" >
+                    <Select field="mise">
                       <Option value="">{data.mise}</Option>
                       <Option value="ap">AP</Option>
                       <Option value="burg">BURG</Option>
@@ -539,14 +537,13 @@ function checkIfNull(data){
                   </CardActions>
                   <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                      {/* <label>
+                      <label>
                         <font size="1">Description 1:</font>
                         <Text
                           className={classes.text}
                           field="description[0]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[0])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -557,7 +554,6 @@ function checkIfNull(data){
                           field="description[1]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[1])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -568,7 +564,6 @@ function checkIfNull(data){
                           field="description[2]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[2])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -579,7 +574,6 @@ function checkIfNull(data){
                           field="description[3]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[3])}
-                          
                         ></Text>
                       </label>
 
@@ -590,7 +584,6 @@ function checkIfNull(data){
                           field="description[4]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[4])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -601,7 +594,6 @@ function checkIfNull(data){
                           field="description[5]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[5])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -612,7 +604,6 @@ function checkIfNull(data){
                           field="description[6]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[6])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -623,7 +614,6 @@ function checkIfNull(data){
                           field="description[7]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[7])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -634,7 +624,6 @@ function checkIfNull(data){
                           field="description[8]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[8])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -645,7 +634,6 @@ function checkIfNull(data){
                           field="description[9]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[9])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -656,7 +644,6 @@ function checkIfNull(data){
                           field="description[10]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[10])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -667,7 +654,6 @@ function checkIfNull(data){
                           field="description[11]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[11])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -678,7 +664,6 @@ function checkIfNull(data){
                           field="description[12]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[12])}
-                          
                         ></Text>
                       </label>
                       <br></br>
@@ -689,9 +674,8 @@ function checkIfNull(data){
                           field="description[13]"
                           // disabled={editCard}
                           initialValue={checkIfNull(data.description[13])}
-                          
                         ></Text>
-                      </label> */}
+                      </label>
 
                       <br></br>
                       <label>
@@ -701,7 +685,6 @@ function checkIfNull(data){
                           field="funfact"
                           // disabled={editCard}
                           initialValue={data.funfact}
-                          
                         ></TextArea>
                       </label>
                     </CardContent>
@@ -712,7 +695,7 @@ function checkIfNull(data){
           </span>
         ) : (
           <span>
-                        <button onClick={e=>handleDelete(data)}>Delete?</button>
+            <button onClick={e => handleDelete(data)}>Delete?</button>
 
             <ButtonBase
               className={classes.ButtonBase}
@@ -730,7 +713,12 @@ function checkIfNull(data){
               <br></br>
               Status: {data.status} <br></br>Appellation: {data.appellation}{" "}
               <br></br>
-              <span>Grapes: {descGrapeList(data.grape)}</span>
+              {data.grape.map((result, index) => (
+                <li key={index}>
+                  {" "}
+                  Grape{index + 1}: {result}
+                </li>
+              ))}
             </Typography>
             <CardContent>
               <Typography
@@ -753,7 +741,12 @@ function checkIfNull(data){
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                <span>Desc: {descGrapeList(data.description)}</span>
+                {data.description.map((result, index) => (
+                  <li key={index}>
+                    {" "}
+                    Desc{index + 1}: {result} ||
+                  </li>
+                ))}
 
                 <Typography paragraph className={classes.paragraph}>
                   Fun Fact: {data.funfact}

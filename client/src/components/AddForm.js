@@ -9,12 +9,36 @@ import {
   Select,
   Option,
   Scope,
-  useFormState
+  useArrayField,
+  useFormState,
+  ArrayField
 } from "informed";
+import DynamicArrays from "./DynamicArrays";
 
 const AddForm = props => {
   const handleNextClick = props.handleNextClick;
   const handlePrevClick = props.handlePrevClick;
+
+  // const Grapes = () => {
+  //   const { add, fields } = useArrayField({ field: "grape" });
+  //   return (
+  //     <React.Fragment>
+  //       <button onClick={add} type="button">
+  //         Add Grape
+  //       </button>
+  //       {fields.map(({ field, key, remove }, i) => (
+  //         <label key={key}>
+  //           Grape {i + 1}:
+  //           <Text field={field} />
+  //           <button type="button" onClick={remove}>
+  //             Remove
+  //           </button>
+  //         </label>
+  //       ))}
+  //     </React.Fragment>
+  //   );
+  // };
+
   const ComponentUsingFormState = () => {
     const formState = useFormState();
     return (
@@ -28,8 +52,8 @@ const AddForm = props => {
   };
 
   return (
-    <Form id="form-api-form">
-      {({ formApi }) => (
+    <Form>
+      {({ formState }) => (
         <div>
           <label>
             Name:
@@ -44,8 +68,14 @@ const AddForm = props => {
             Grapes:
             <Text field="grapes" />
           </label>
+          {/* <label>
+          Grape 1:
+          <Text field="grape[0]" />
+        </label> */}
 
-          <label>
+          <DynamicArrays />
+
+          {/* <label>
             Grape 1:
             <Text field="grape[0]" />
           </label>
@@ -61,7 +91,7 @@ const AddForm = props => {
           <label>
             Grape 4:
             <Text field="grape[3]" />
-          </label>
+          </label> */}
           <label>
             Year:
             <Text field="year" type="number" />
@@ -82,7 +112,7 @@ const AddForm = props => {
             Appellation:
             <Text field="appellation" />
           </label>
-          <label>
+          {/* <label>
             Description 1:
             <Text field="description[0]" />
           </label>
@@ -137,7 +167,7 @@ const AddForm = props => {
           <label>
             Description 14:
             <Text field="description[13]" />
-          </label>
+          </label> */}
           <label>
             Price:
             <Text field="price" type="number" />
@@ -145,10 +175,6 @@ const AddForm = props => {
           <label>
             Mise:
             <Select field="mise">
-              <Option value="" disabled>
-                Select One...
-              </Option>
-
               <Option value="ap">AP</Option>
 
               <Option value="burg"> BURG</Option>
@@ -166,9 +192,6 @@ const AddForm = props => {
           <label>
             Color:
             <Select field="color">
-              <Option value="" disabled>
-                Select One...
-              </Option>
               <Option value="red">Red</Option>
               <Option value="white">White</Option>
               <Option value="dessert">Dessert</Option>
@@ -178,11 +201,9 @@ const AddForm = props => {
           <label>
             Status:
             <Select field="status">
-              <Option value="" disabled>
-                Select One...
-              </Option>
-              <Option value="none">None</Option>
               <Option value="added">Added</Option>
+              <Option value="none">None</Option>
+
               <Option value="removed">Removed</Option>
               <Option value="hidden">Hidden</Option>
             </Select>
@@ -194,7 +215,8 @@ const AddForm = props => {
             Fun Fact:
             <TextArea field="funfact" />
           </label>
-
+          <code>{JSON.stringify(formState.values)}</code>
+          <code>{JSON.stringify(formState.touched)}</code>
           <ComponentUsingFormState />
           <button onClick={handleNextClick}>Next</button>
           <button onClick={handlePrevClick}>Prev</button>
