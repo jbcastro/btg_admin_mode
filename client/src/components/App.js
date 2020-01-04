@@ -42,9 +42,15 @@ class App extends Component {
 
       .then(res => {
         const glassesData = res.express;
-        glassesData.sort(
-          (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
-        );
+        glassesData.sort(function(a, b) {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
 
         this.setState({ glasses: glassesData });
         this.setState({ unFilteredWines: glassesData });
@@ -92,9 +98,9 @@ class App extends Component {
   };
 
   //for adding and updating
-  handleSubmit = e => {
-    let name = e.name;
-    let newWine = e;
+  handleSubmit = values => {
+    let name = values.name;
+    let newWine = values;
 
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
@@ -103,24 +109,29 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(newWine)
-    });
-    this.callBackendAPI()
-
-      .then(res => {
-        const glassesData = res.express;
-        glassesData.sort(
-          (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
-        );
-
-        this.setState({ glasses: glassesData });
-        this.setState({ curItem: {} });
-      })
-      .catch(err => console.log(err));
+    })
+      .then(res => res.json())
+      .then(json => {
+        let newData;
+        if (!newWine._id) {
+          newData = this.state.glasses;
+          newWine._id = json._id;
+          newData.unshift(newWine);
+        } else {
+          newData = this.state.glasses.map(item => {
+            if (item._id === newWine._id) {
+              item = newWine;
+            }
+            return item;
+          });
+        }
+        this.setState({ glasses: newData });
+      });
   };
-  handleUpdate = e => {
-    let name = e.name;
-    let newWine = e;
-    let curItemId = this.state.curItem._id;
+  handleUpdate = values => {
+    let name = values.name;
+    let newWine = values;
+    console.log(values);
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -128,19 +139,25 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(newWine)
-    });
-    this.callBackendAPI()
-
-      .then(res => {
-        const glassesData = res.express;
-        glassesData.sort(
-          (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
-        );
-
-        this.setState({ glasses: glassesData });
+    })
+      .then(res => res.json())
+      .then(json => {
+        let newData;
+        if (!newWine._id) {
+          newData = this.state.glasses;
+          newWine._id = json._id;
+          newData.push(newWine);
+        } else {
+          newData = this.state.glasses.map(item => {
+            if (item._id === newWine._id) {
+              item = newWine;
+            }
+            return item;
+          });
+        }
+        this.setState({ glasses: newData });
         this.setState({ curItem: {} });
-      })
-      .catch(err => console.log(err));
+      });
   };
 
   //making whatever is typed in as current item

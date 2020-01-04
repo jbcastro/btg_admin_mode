@@ -67,3 +67,6 @@ li {
 ul {
   float: center;
 }
+label {
+  padding: 4px;
+}

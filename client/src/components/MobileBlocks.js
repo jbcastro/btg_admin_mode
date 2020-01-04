@@ -15,7 +15,8 @@ import ButtonBase from "@material-ui/core/ButtonBase";
 import CardMedia from "@material-ui/core/CardMedia";
 import { string } from "prop-types";
 import { PromiseProvider } from "mongoose";
-
+import DynamicGrapes from "./DynamicGrapes";
+import DynamicDescription from "./DynamicDescription";
 import {
   Form,
   Text,
@@ -148,7 +149,7 @@ const MobileBlocks = ({
   const country = "country";
   const appellation = "appellation";
   const grape = "grape";
-  const description = "description";
+  // const description = "description";
   const vinyard = "vinyard";
   const color = "color";
   const mise = "mise";
@@ -203,6 +204,7 @@ const MobileBlocks = ({
       return classes.buttonHidden;
     }
   }
+
   // function descGrapeList(list) {
   //   const listResult = list.map((result, index) => (
   //     <li key={index}>{result}</li>
@@ -273,44 +275,48 @@ const MobileBlocks = ({
 
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [deleteButtonEnable, setDeleteButton] = React.useState(true);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  const Grapes = () => {
-    const { add, fields } = useArrayField({ field: "grape" });
-    return (
-      <React.Fragment>
-        <button onClick={add} type="button">
-          Add Grape
-        </button>
-        {fields.map(({ field, key, remove }, i) => (
-          <label key={key}>
-            <p></p>
-            Grape {i}:
-            <Text field={field} />
-            <button type="button" onClick={remove}>
-              Remove
-            </button>
-          </label>
-        ))}
-      </React.Fragment>
-    );
+  const handleDelButton = () => {
+    setDeleteButton(!deleteButtonEnable);
   };
-  const ComponentUsingFormState = () => {
-    const formState = useFormState();
+  // const Grapes = () => {
+  //   const { add, fields } = useArrayField({ field: "grape" });
+  //   return (
+  //     <React.Fragment>
+  //       <button onClick={add} type="button">
+  //         Add Grape
+  //       </button>
+  //       {fields.map(({ field, key, remove }, i) => (
+  //         <label key={key}>
+  //           <p></p>
+  //           Grape {i}:
+  //           <Text field={field} />
+  //           <button type="button" onClick={remove}>
+  //             Remove
+  //           </button>
+  //         </label>
+  //       ))}
+  //     </React.Fragment>
+  //   );
+  // };
+  // const ComponentUsingFormState = () => {
+  //   const formState = useFormState();
 
-    return (
-      <div>
-        <ButtonBase
-          className={classes.ButtonBase}
-          onClick={e => handleUpdate(formState.values)}
-        >
-          Save
-        </ButtonBase>
-      </div>
-    );
-  };
+  //   return (
+  //     <div>
+  //       <ButtonBase
+  //         className={classes.ButtonBase}
+  //         onClick={e => handleUpdate(formState.values)}
+  //       >
+  //         Save
+  //       </ButtonBase>
+  //     </div>
+  //   );
+  // };
 
   return (
     <Card className={checkStatus(data.status)} key={data._id} raised>
@@ -329,59 +335,77 @@ const MobileBlocks = ({
           //       <button onClick={e=>handleSubmit(e)}></button>
           //  </span>
           <span>
-            <button onClick={e => handleDelete(e._id)}>Delete?</button>
+            <button hidden={!deleteButtonEnable} onClick={handleDelButton}>
+              Delete?
+            </button>
+            <button
+              id="button2"
+              hidden={deleteButtonEnable}
+              onClick={e => handleDelete(data)}
+            >
+              Are you Sure You Want to Delete?
+            </button>
             <br></br>
             <br></br>
 
-            <Form id="form-api-form" initialValues={{ grape: data.grape }}>
-              {({ formApi }) => (
-                <div>
-                  <ComponentUsingFormState />
-                  <label>
-                    <font size="1">Name:</font>
-                    <Text
-                      className={classes.text}
-                      field="name"
-                      // disabled={editCard}
-                      initialValue={data.name}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Vinyard:</font>
-                    <Text
-                      className={classes.text}
-                      field="vinyard"
-                      // disabled={editCard}
-                      initialValue={data.vinyard}
-                    ></Text>
-                  </label>
+            <Form
+              id="form-api-form"
+              initialValues={{
+                grape: data.grape,
+                description: data.description
+              }}
+              onSubmit={values => {
+                handleUpdate(values);
+              }}
+            >
+              <div>
+                <button type="submit">submit</button>
+                <label>
+                  <font size="1">Name:</font>
+                  <Text
+                    className={classes.text}
+                    field="name"
+                    // disabled={editCard}
+                    initialValue={data.name}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Vinyard:</font>
+                  <Text
+                    className={classes.text}
+                    field="vinyard"
+                    // disabled={editCard}
+                    initialValue={data.vinyard}
+                  ></Text>
+                </label>
 
-                  <label>
-                    <font size="1">id:</font>
-                    <Text
-                      className={classes.text}
-                      field="_id"
-                      disabled={true}
-                      initialValue={data._id}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Grapes:</font>
-                    <Text
-                      className={classes.text}
-                      field="grapes"
-                      // disabled={editCard}
-                      initialValue={checkIfNull(data.grapes)}
-                    ></Text>
-                  </label>
-                  <br></br>
+                <label>
+                  <font size="1">id:</font>
+                  <Text
+                    className={classes.text}
+                    field="_id"
+                    disabled={true}
+                    initialValue={data._id}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Grapes:</font>
+                  <Text
+                    className={classes.text}
+                    field="grapes"
+                    // disabled={editCard}
+                    initialValue={checkIfNull(data.grapes)}
+                  ></Text>
+                </label>
+                <br></br>
 
-                  {/* start of grapes */}
-                  <Grapes />
+                {/* start of grapes */}
 
-                  {/* {data.grape.map(({ field, key }, i, result) => (
+                <DynamicGrapes />
+
+                {/* {data.grape.map(({ field, key }, i, result) => (
                     <label key={key}>
                       <br></br> Grape {i}:
                       <Text
@@ -393,7 +417,7 @@ const MobileBlocks = ({
                     </label>
                   ))} */}
 
-                  {/* <label>
+                {/* <label>
                     <font size="1">Indiv Grape1:</font>
                     <Text
                       className={classes.text}
@@ -436,274 +460,128 @@ const MobileBlocks = ({
                   </label>
                   <br></br> */}
 
-                  {/* end of grapes */}
-                  <label>
-                    <font size="1">Year:</font>
-                    <Text
-                      className={classes.text}
-                      field="year"
-                      type="number"
-                      // disabled={editCard}
-                      initialValue={data.year}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Place:</font>
-                    <Text
-                      className={classes.text}
-                      field="place"
-                      // disabled={editCard}
-                      initialValue={data.place}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Area:</font>
-                    <Text
-                      className={classes.text}
-                      field="area"
-                      // disabled={editCard}
-                      initialValue={data.area}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Country:</font>
-                    <Text
-                      className={classes.text}
-                      field="country"
-                      // disabled={editCard}
-                      initialValue={data.country}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Appellation:</font>
-                    <Text
-                      className={classes.text}
-                      field="appellation"
-                      // disabled={editCard}
-                      initialValue={data.appellation}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Price:</font>
-                    <Text
-                      className={classes.text}
-                      field="price"
-                      type="number"
-                      // disabled={editCard}
-                      initialValue={data.price}
-                    ></Text>
-                  </label>
+                {/* end of grapes */}
+                <label>
+                  <font size="1">Year:</font>
+                  <Text
+                    className={classes.text}
+                    field="year"
+                    type="number"
+                    // disabled={editCard}
+                    initialValue={data.year}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Place:</font>
+                  <Text
+                    className={classes.text}
+                    field="place"
+                    // disabled={editCard}
+                    initialValue={data.place}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Area:</font>
+                  <Text
+                    className={classes.text}
+                    field="area"
+                    // disabled={editCard}
+                    initialValue={data.area}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Country:</font>
+                  <Text
+                    className={classes.text}
+                    field="country"
+                    // disabled={editCard}
+                    initialValue={data.country}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Appellation:</font>
+                  <Text
+                    className={classes.text}
+                    field="appellation"
+                    // disabled={editCard}
+                    initialValue={data.appellation}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Price:</font>
+                  <Text
+                    className={classes.text}
+                    field="price"
+                    type="number"
+                    // disabled={editCard}
+                    initialValue={data.price}
+                  ></Text>
+                </label>
 
-                  <br></br>
-                  <label>
-                    Status:
-                    <Select field="status">
-                      <Option value="">{data.status}</Option>
-                      <Option value="none">None</Option>
-                      <Option value="added">Added</Option>
-                      <Option value="removed">Removed</Option>
-                      <Option value="hidden">Hidden</Option>
-                    </Select>
-                  </label>
-                  <br></br>
-                  <label>
-                    Mise:
-                    <Select field="mise">
-                      <Option value="">{data.mise}</Option>
-                      <Option value="ap">AP</Option>
-                      <Option value="burg">BURG</Option>
-                      <Option value="dbx">BDX</Option>
-                      <Option value="flute">Flute</Option>
-                      <Option value="dw ">DW</Option>
-                      <Option value="krug">Krug Flute</Option>
-                    </Select>
-                  </label>
-                  <CardActions disableSpacing>
-                    <IconButton
-                      className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded
-                      })}
-                      onClick={handleExpandClick}
-                      aria-expanded={expanded}
-                      aria-label="show more"
-                    >
-                      <ExpandMoreIcon />
-                    </IconButton>
-                  </CardActions>
-                  <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-                      <label>
-                        <font size="1">Description 1:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[0]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[0])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 2:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[1]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[1])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 3:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[2]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[2])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 4:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[3]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[3])}
-                        ></Text>
-                      </label>
-
-                      <label>
-                        <font size="1">Description 5:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[4]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[4])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 6:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[5]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[5])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 7:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[6]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[6])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 8:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[7]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[7])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 9:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[8]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[8])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 10:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[9]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[9])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 11:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[10]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[10])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 12:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[11]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[11])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 13:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[12]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[12])}
-                        ></Text>
-                      </label>
-                      <br></br>
-                      <label>
-                        <font size="1">Description 14:</font>
-                        <Text
-                          className={classes.text}
-                          field="description[13]"
-                          // disabled={editCard}
-                          initialValue={checkIfNull(data.description[13])}
-                        ></Text>
-                      </label>
-
-                      <br></br>
-                      <label>
-                        <font size="1">Fun Fact:</font>
-                        <TextArea
-                          className={classes.text}
-                          field="funfact"
-                          // disabled={editCard}
-                          initialValue={data.funfact}
-                        ></TextArea>
-                      </label>
-                    </CardContent>
-                  </Collapse>
-                </div>
-              )}
+                <br></br>
+                <label>
+                  Status:
+                  <Select field="status">
+                    <Option value="">{data.status}</Option>
+                    <Option value="none">None</Option>
+                    <Option value="added">Added</Option>
+                    <Option value="removed">Removed</Option>
+                    <Option value="hidden">Hidden</Option>
+                  </Select>
+                </label>
+                <br></br>
+                <label>
+                  Mise:
+                  <Select field="mise">
+                    <Option value="">{data.mise}</Option>
+                    <Option value="ap">AP</Option>
+                    <Option value="burg">BURG</Option>
+                    <Option value="dbx">BDX</Option>
+                    <Option value="flute">Flute</Option>
+                    <Option value="dw ">DW</Option>
+                    <Option value="krug">Krug Flute</Option>
+                  </Select>
+                </label>
+                <DynamicDescription />
+                <CardActions disableSpacing>
+                  <IconButton
+                    className={clsx(classes.expand, {
+                      [classes.expandOpen]: expanded
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <CardContent>
+                    <br></br>
+                    <label>
+                      <font size="1">Fun Fact:</font>
+                      <TextArea
+                        className={classes.text}
+                        field="funfact"
+                        // disabled={editCard}
+                        initialValue={data.funfact}
+                      ></TextArea>
+                    </label>
+                  </CardContent>
+                </Collapse>
+              </div>
             </Form>
           </span>
         ) : (
           <span>
-            <button onClick={e => handleDelete(data)}>Delete?</button>
-
-            <ButtonBase
-              className={classes.ButtonBase}
-              id={data._id}
-              onClick={event => handleSelect(event)}
-            >
+            <button id={data._id} onClick={event => handleSelect(event)}>
               Edit
-            </ButtonBase>
+            </button>
 
             <Typography variant="body2" color="textSecondary" component="p">
               A {""}
