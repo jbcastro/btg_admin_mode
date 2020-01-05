@@ -12,7 +12,8 @@ const MobileBlocksData = ({
   onChange,
   handleSubmit,
   handleUpdate,
-  handleDelete
+  handleDelete,
+  onCurItemClear
 }) => {
   const data = glasses;
 
@@ -31,6 +32,7 @@ const MobileBlocksData = ({
         handleUpdate={handleUpdate}
         handleSubmit={handleSubmit}
         handleDelete={handleDelete}
+        onCurItemClear={onCurItemClear}
       />
     );
   });

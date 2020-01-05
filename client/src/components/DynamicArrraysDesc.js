@@ -13,11 +13,11 @@ const DynamicArraysDesc = () => {
             {fields.map(({ field, key, remove }, i) => (
               <label htmlFor={i} key={key}>
                 Description {i + 1}:
-                <Text field={field} id={i} />
+                <Text field={field}  />
                 <button onClick={add} type="button">
                   Add Description
                 </button>{" "}
-                <button type="button" onClick={remove} id={i}>
+                <button type="button" onClick={remove} >
                   Remove This Description
                 </button>
                 <br></br>

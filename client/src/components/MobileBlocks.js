@@ -276,6 +276,8 @@ const MobileBlocks = ({
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [deleteButtonEnable, setDeleteButton] = React.useState(true);
+  const [editEnable, setEdit] = React.useState(false);
+  // const [editEnable2, setEdit2] = React.useState(t);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -283,61 +285,23 @@ const MobileBlocks = ({
   const handleDelButton = () => {
     setDeleteButton(!deleteButtonEnable);
   };
-  // const Grapes = () => {
-  //   const { add, fields } = useArrayField({ field: "grape" });
-  //   return (
-  //     <React.Fragment>
-  //       <button onClick={add} type="button">
-  //         Add Grape
-  //       </button>
-  //       {fields.map(({ field, key, remove }, i) => (
-  //         <label key={key}>
-  //           <p></p>
-  //           Grape {i}:
-  //           <Text field={field} />
-  //           <button type="button" onClick={remove}>
-  //             Remove
-  //           </button>
-  //         </label>
-  //       ))}
-  //     </React.Fragment>
-  //   );
-  // };
-  // const ComponentUsingFormState = () => {
-  //   const formState = useFormState();
-
-  //   return (
-  //     <div>
-  //       <ButtonBase
-  //         className={classes.ButtonBase}
-  //         onClick={e => handleUpdate(formState.values)}
-  //       >
-  //         Save
-  //       </ButtonBase>
-  //     </div>
-  //   );
-  // };
-
+  const handleEdit = () => {
+    setEdit(!editEnable);
+  };
+ 
   return (
     <Card className={checkStatus(data.status)} key={data._id} raised>
       <CardHeader title={data.name} />
 
       <span>
-        {checkIfCurItem(data._id) ? (
-          //   <span>
-          //     <form>
-          //       Name:<input type="text" name="name"  value={data.name}></input>
-          //       Grape1:<input type="text" name="grape[0]"  value={data.grape[0]}></input>
-          //       Grape2:<input type="text" name="grape[1]"  value={data.grape[1]}></input>
-          //       Grape3:<input type="text" name="grape[2]"  value={data.grape[2]}></input>
-          //       Grape4:<input type="text" name="grape[3]"  value={data.grape[3]}></input>
-          //       </form>
-          //       <button onClick={e=>handleSubmit(e)}></button>
-          //  </span>
+      
+        {editEnable ? (
+       
           <span>
             <button hidden={!deleteButtonEnable} onClick={handleDelButton}>
               Delete?
             </button>
+          
             <button
               id="button2"
               hidden={deleteButtonEnable}
@@ -347,6 +311,7 @@ const MobileBlocks = ({
             </button>
             <br></br>
             <br></br>
+            
 
             <Form
               id="form-api-form"
@@ -355,17 +320,22 @@ const MobileBlocks = ({
                 description: data.description
               }}
               onSubmit={values => {
-                handleUpdate(values);
+                handleUpdate (values)
+                // handleEdit()
+                
+                
               }}
             >
               <div>
-                <button type="submit">submit</button>
+                <button type="submit">Save</button>
+                
                 <label>
+                  <br></br>
                   <font size="1">Name:</font>
                   <Text
                     className={classes.text}
                     field="name"
-                    // disabled={editCard}
+                    
                     initialValue={data.name}
                   ></Text>
                 </label>
@@ -375,7 +345,7 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="vinyard"
-                    // disabled={editCard}
+                    
                     initialValue={data.vinyard}
                   ></Text>
                 </label>
@@ -395,7 +365,7 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="grapes"
-                    // disabled={editCard}
+                    
                     initialValue={checkIfNull(data.grapes)}
                   ></Text>
                 </label>
@@ -405,61 +375,7 @@ const MobileBlocks = ({
 
                 <DynamicGrapes />
 
-                {/* {data.grape.map(({ field, key }, i, result) => (
-                    <label key={key}>
-                      <br></br> Grape {i}:
-                      <Text
-                        multiple={true}
-                        field={grapezz[i]}
-                        className={classes.text}
-                        initialValue={result[i]}
-                      />
-                    </label>
-                  ))} */}
-
-                {/* <label>
-                    <font size="1">Indiv Grape1:</font>
-                    <Text
-                      className={classes.text}
-                      field="grape[0]"
-                      // disabled={editCard}
-                      initialValue={checkIfNull(data.grape[0])}
-                      //
-                    ></Text>
-                  </label>
-
-                  <br></br>
-                  <label>
-                    <font size="1">Indiv Grape2:</font>
-                    <Text
-                      className={classes.text}
-                      field="grape[1]"
-                      // disabled={editCard}
-                      initialValue={checkIfNull(data.grape[1])}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Indiv Grape3:</font>
-                    <Text
-                      className={classes.text}
-                      field="grape[2]"
-                      // disabled={editCard}
-                      initialValue={checkIfNull(data.grape[2])}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Indiv Grape4:</font>
-                    <Text
-                      className={classes.text}
-                      field="grape[3]"
-                      // disabled={editCard}
-                      initialValue={checkIfNull(data.grape[3])}
-                    ></Text>
-                  </label>
-                  <br></br> */}
-
+              
                 {/* end of grapes */}
                 <label>
                   <font size="1">Year:</font>
@@ -467,7 +383,7 @@ const MobileBlocks = ({
                     className={classes.text}
                     field="year"
                     type="number"
-                    // disabled={editCard}
+                    
                     initialValue={data.year}
                   ></Text>
                 </label>
@@ -477,7 +393,7 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="place"
-                    // disabled={editCard}
+                    
                     initialValue={data.place}
                   ></Text>
                 </label>
@@ -487,7 +403,7 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="area"
-                    // disabled={editCard}
+                    
                     initialValue={data.area}
                   ></Text>
                 </label>
@@ -497,7 +413,7 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="country"
-                    // disabled={editCard}
+                    
                     initialValue={data.country}
                   ></Text>
                 </label>
@@ -507,7 +423,7 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="appellation"
-                    // disabled={editCard}
+                    
                     initialValue={data.appellation}
                   ></Text>
                 </label>
@@ -518,7 +434,7 @@ const MobileBlocks = ({
                     className={classes.text}
                     field="price"
                     type="number"
-                    // disabled={editCard}
+                    
                     initialValue={data.price}
                   ></Text>
                 </label>
@@ -568,7 +484,7 @@ const MobileBlocks = ({
                       <TextArea
                         className={classes.text}
                         field="funfact"
-                        // disabled={editCard}
+                        
                         initialValue={data.funfact}
                       ></TextArea>
                     </label>
@@ -579,10 +495,8 @@ const MobileBlocks = ({
           </span>
         ) : (
           <span>
-            <button id={data._id} onClick={event => handleSelect(event)}>
-              Edit
-            </button>
-
+            
+            <button onClick={handleEdit}>Edit</button>
             <Typography variant="body2" color="textSecondary" component="p">
               A {""}
               {coravinCheck(data.coravin)} {data.year} {data.grapes} by{" "}

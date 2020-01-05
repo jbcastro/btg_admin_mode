@@ -54,9 +54,10 @@ const AddForm = props => {
 
   return (
     <Form
-      initialValues={{ grape: [""], description: [""] }}
+      initialValues={{ grape: [""], description: [""], _id:"" }}
       onSubmit={values => {
-        props.handleSubmit(values);
+        props.handleSubmit(values)
+        
       }}
     >
       <div>
