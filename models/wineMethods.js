@@ -6,7 +6,7 @@ exports.getAll = () => {
       return err;
     }
 
-    console.log(result);
+    // console.log(result);
 
     return result;
   });

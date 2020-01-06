@@ -19,6 +19,7 @@
     "npm-update-all": "^1.0.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-hook-form": "^4.4.3",
     "react-scripts": "^3.3.0"
   },
   "scripts": {

@@ -1,4 +1,7 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+
+
 import {
   Form,
   Text,
@@ -16,51 +19,29 @@ import {
 import DynamicArraysGrape from "./DynamicArraysGrape";
 import DynamicArraysDesc from "./DynamicArrraysDesc";
 
+
 const AddForm = props => {
   const handleNextClick = props.handleNextClick;
   const handlePrevClick = props.handlePrevClick;
-
-  // const Grapes = () => {
-  //   const { add, fields } = useArrayField({ field: "grape" });
-  //   return (
-  //     <React.Fragment>
-  //       <button onClick={add} type="button">
-  //         Add Grape
-  //       </button>
-  //       {fields.map(({ field, key, remove }, i) => (
-  //         <label key={key}>
-  //           Grape {i + 1}:
-  //           <Text field={field} />
-  //           <button type="button" onClick={remove}>
-  //             Remove
-  //           </button>
-  //         </label>
-  //       ))}
-  //     </React.Fragment>
-  //   );
-  // };
-
-  // const ComponentUsingFormState = () => {
-  //   const formState = useFormState();
-  //   return (
-  //     <div>
-  //       {/* <button onClick={e => props.setFormState(formState.values)}>Add</button> */}
-  //       <button onClick={e => props.handleSubmit(formState.values)}>
-  //         add/update
-  //       </button>
-  //     </div>
-  //   );
-  // };
+  const onCurItemClear = props.onCurItemClear
+  
+  
+  
+  const { register, handleSubmit, reset } = useForm();
 
   return (
-    <Form
-      initialValues={{ grape: [""], description: [""], _id:"" }}
+    <Form 
+      initialValues={{ grape: [""], description: [""]}}
       onSubmit={values => {
         props.handleSubmit(values)
-        
       }}
     >
       <div>
+      <input type="reset" /> 
+      <input type="button" onClick={reset} />
+     
+
+     
         <label>
           Name:
           <Text value="" field="name" />
@@ -69,6 +50,7 @@ const AddForm = props => {
           Vinyard:
           <Text field="vinyard" />
         </label>{" "}
+      
         <label>
           Grapes:
           <Text field="grapes" />

@@ -320,7 +320,7 @@ const MobileBlocks = ({
                 description: data.description
               }}
               onSubmit={values => {
-                handleUpdate (values)
+                handleSubmit (values)
                 // handleEdit()
                 
                 

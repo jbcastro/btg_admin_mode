@@ -53,7 +53,7 @@ app.get("/express_backend/delete", (req, res, next) => {
     });
 });
 
-app.post("/express_backend/add", (req, res) => {
+app.post("/express_backend/add", (req, res,next) => {
   // const
   if (!req.body._id) {
     let small = new Wines({
@@ -79,7 +79,7 @@ app.post("/express_backend/add", (req, res) => {
       picture: req.body.picture
     });
     small.save((err, newWine) => {
-      if (err) return handleError(err);
+      if (err) return next(err);
       res.json({ updated: 0, _id: newWine._id });
     });
   } else {

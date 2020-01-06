@@ -34,6 +34,7 @@ class App extends Component {
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handlePrevClick = this.handlePrevClick.bind(this);
     this.editCardChange = this.editCardChange.bind(this);
+    
   }
 
   componentDidMount() {
@@ -101,7 +102,8 @@ class App extends Component {
   handleSubmit = values => {
     let name = values.name;
     let newWine = values;
-
+    console.log(newWine)
+    
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -113,42 +115,52 @@ class App extends Component {
       .then(res => res.json())
       .then(json => {
         let newData;
-        
+        if (!newWine._id) { 
           newData = this.state.glasses;
           newWine._id = json._id;
           newData.unshift(newWine);
-        
-        this.setState({ glasses: newData });
-        return
+        } else { // update existing item 
+          newWine._id = json._id;
+          console.log(newWine._id)
+          newData = this.state.glasses.map((item) => {
+            if (item._id === newWine._id) {
+              item = newWine; 
+            }
+            return item;
+          });          
+        }
+
+        // Update state with new array
+        this.setState({glasses: newData});
       });
   };
   handleUpdate = (values) => {
     let name = values.name;
-    let updatedWine = values;
+    let newWine = values;
     // let oldWine = initialValue
-    console.log(updatedWine);
+    console.log(newWine);
     // console.log(oldWine)
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(updatedWine)
+      body: JSON.stringify(newWine)
     })
       .then(res => res.json())
       .then(json => {
         let newData;
-        if (!updatedWine._id) { 
+        if (!newWine._id) { 
           newData = this.state.glasses;
-          updatedWine._id = json._id;
-          newData.push(updatedWine);
+          newWine._id = json._id;
+          newData.push(newWine);
         } else { // update existing item 
-          updatedWine._id = json._id;
-          console.log(updatedWine._id)
+          newWine._id = json._id;
+          console.log(newWine._id)
           newData = this.state.glasses.map((item) => {
-            if (item._id === updatedWine._id) {
-              item = updatedWine; 
+            if (item._id === newWine._id) {
+              item = newWine; 
             }
             return item;
           });          
