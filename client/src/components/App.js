@@ -34,7 +34,6 @@ class App extends Component {
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handlePrevClick = this.handlePrevClick.bind(this);
     this.editCardChange = this.editCardChange.bind(this);
-    
   }
 
   componentDidMount() {
@@ -102,8 +101,10 @@ class App extends Component {
   handleSubmit = values => {
     let name = values.name;
     let newWine = values;
-    console.log(newWine)
-    
+
+    console.log(newWine);
+    console.log(values.target);
+
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -112,29 +113,40 @@ class App extends Component {
       },
       body: JSON.stringify(newWine)
     })
-      .then(res => res.json())
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw Error(`Request rejected with status ${res.status}`);
+        }
+      })
       .then(json => {
         let newData;
-        if (!newWine._id) { 
+        if (!newWine._id) {
           newData = this.state.glasses;
           newWine._id = json._id;
-          newData.unshift(newWine);
-        } else { // update existing item 
+          console.log(newWine._id);
+          newData = [...newData, newWine];
+        } else {
+          // update existing item
           newWine._id = json._id;
-          console.log(newWine._id)
-          newData = this.state.glasses.map((item) => {
+          console.log(newWine._id);
+          newData = this.state.glasses.map(item => {
             if (item._id === newWine._id) {
-              item = newWine; 
+              item = newWine;
             }
             return item;
-          });          
+          });
         }
 
         // Update state with new array
-        this.setState({glasses: newData});
+        this.setState({ glasses: newData });
+      })
+      .catch(error => {
+        console.log("this be your error" + error);
       });
   };
-  handleUpdate = (values) => {
+  handleUpdate = values => {
     let name = values.name;
     let newWine = values;
     // let oldWine = initialValue
@@ -151,25 +163,26 @@ class App extends Component {
       .then(res => res.json())
       .then(json => {
         let newData;
-        if (!newWine._id) { 
+        if (!newWine._id) {
           newData = this.state.glasses;
           newWine._id = json._id;
           newData.push(newWine);
-        } else { // update existing item 
+        } else {
+          // update existing item
           newWine._id = json._id;
-          console.log(newWine._id)
-          newData = this.state.glasses.map((item) => {
+          console.log(newWine._id);
+          newData = this.state.glasses.map(item => {
             if (item._id === newWine._id) {
-              item = newWine; 
+              item = newWine;
             }
             return item;
-          });          
+          });
         }
 
         // Update state with new array
-        this.setState({glasses: newData});
+        this.setState({ glasses: newData });
       });
-    }
+  };
 
   //making whatever is typed in as current item
   onChange = event => {

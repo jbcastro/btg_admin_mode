@@ -1,6 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-
 
 import {
   Form,
@@ -19,29 +17,23 @@ import {
 import DynamicArraysGrape from "./DynamicArraysGrape";
 import DynamicArraysDesc from "./DynamicArrraysDesc";
 
-
 const AddForm = props => {
   const handleNextClick = props.handleNextClick;
   const handlePrevClick = props.handlePrevClick;
-  const onCurItemClear = props.onCurItemClear
-  
-  
-  
-  const { register, handleSubmit, reset } = useForm();
-
+  const onCurItemClear = props.onCurItemClear;
+  function myFunction(id) {
+    id.reset();
+  }
   return (
-    <Form 
-      initialValues={{ grape: [""], description: [""]}}
-      onSubmit={values => {
-        props.handleSubmit(values)
+    <Form
+      id="myForm"
+      initialValues={{ grape: [""], description: [""] }}
+      onSubmit={(values, id) => {
+        props.handleSubmit(values);
+        myFunction(id);
       }}
     >
       <div>
-      <input type="reset" /> 
-      <input type="button" onClick={reset} />
-     
-
-     
         <label>
           Name:
           <Text value="" field="name" />
@@ -50,7 +42,6 @@ const AddForm = props => {
           Vinyard:
           <Text field="vinyard" />
         </label>{" "}
-      
         <label>
           Grapes:
           <Text field="grapes" />
