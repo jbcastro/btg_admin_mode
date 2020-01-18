@@ -16,24 +16,22 @@ import {
 } from "informed";
 import DynamicArraysGrape from "./DynamicArraysGrape";
 import DynamicArraysDesc from "./DynamicArrraysDesc";
+import { PromiseProvider } from "mongoose";
 
 const AddForm = props => {
   const handleNextClick = props.handleNextClick;
   const handlePrevClick = props.handlePrevClick;
   const onCurItemClear = props.onCurItemClear;
-  function myFunction(id) {
-    id.reset();
-  }
+  const handleSubmit = props.handleSubmit
+  
   return (
     <Form
       id="myForm"
       initialValues={{ grape: [""], description: [""] }}
-      onSubmit={(values, id) => {
-        props.handleSubmit(values);
-        myFunction(id);
-      }}
+      onSubmit={handleSubmit}
     >
       <div>
+       
         <label>
           Name:
           <Text value="" field="name" />

@@ -36,9 +36,9 @@ import TextField from "@material-ui/core/TextField";
 // import MobileBar from "./MobileBar";
 
 const useStyles = makeStyles(theme => ({
-  button: {
-    margin: theme.spacing(1)
-  },
+  // button: {
+  //   margin: theme.spacing(1)
+  // },
 
   input: {
     display: "none"
@@ -273,6 +273,7 @@ const MobileBlocks = ({
     }
   }
 
+
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [deleteButtonEnable, setDeleteButton] = React.useState(true);
@@ -287,22 +288,26 @@ const MobileBlocks = ({
   };
   const handleEdit = () => {
     setEdit(!editEnable);
+    
   };
  
   return (
+    <div>
     <Card className={checkStatus(data.status)} key={data._id} raised>
       <CardHeader title={data.name} />
 
       <span>
+      <button type="button" onClick={handleEdit}>Edit</button>
       
         {editEnable ? (
        
           <span>
-            <button hidden={!deleteButtonEnable} onClick={handleDelButton}>
+            <button type="button" hidden={!deleteButtonEnable} onClick={handleDelButton}>
               Delete?
             </button>
           
             <button
+            type="button"
               id="button2"
               hidden={deleteButtonEnable}
               onClick={e => handleDelete(data)}
@@ -319,16 +324,12 @@ const MobileBlocks = ({
                 grape: data.grape,
                 description: data.description
               }}
-              onSubmit={values => {
-                handleSubmit (values)
-                // handleEdit()
-                
-                
-              }}
+              onSubmit={handleUpdate}
+                // han}
             >
               <div>
                 <button type="submit">Save</button>
-                
+                <button type="button" onClick={handleEdit}>Close</button>
                 <label>
                   <br></br>
                   <font size="1">Name:</font>
@@ -496,7 +497,7 @@ const MobileBlocks = ({
         ) : (
           <span>
             
-            <button onClick={handleEdit}>Edit</button>
+            
             <Typography variant="body2" color="textSecondary" component="p">
               A {""}
               {coravinCheck(data.coravin)} {data.year} {data.grapes} by{" "}
@@ -549,246 +550,9 @@ const MobileBlocks = ({
         )}
       </span>
     </Card>
+    </div>
   );
 };
 
 export default MobileBlocks;
 
-// {/*
-//       for images */}
-//       {/* {/* <CardMedia
-//         className={classes.media}
-//         image={`https://josephbeckcastro.com/site4/images/${data.picture}.jpg`}
-//         title={data.name} */}
-//       /> */}
-
-// A {""}
-// <ButtonBase
-//   className={changeCardStuff()}
-//   id={coravin}
-//   onClick={event => onSelect(event)}
-//   value={data.coravin}
-// >
-//   {coravinCheck(data.coravin)}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.year}
-//   id={year}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.year}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   component="button"
-//   value={data.grapes}
-//   id={grapes}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.grapes}
-// </ButtonBase>{" "}
-// from{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.place}
-//   id={place}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.place}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.area}
-//   id={area}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.area}
-// </ButtonBase>{" "}
-// in {""}
-// {/* <TextField
-//   multiline
-//   label="Country"
-//   type="text"
-//   name="country"
-//   placeholder="Country"
-//   onBlur={onChange}
-//   defaultValue={data.country}
-//   margin="normal"
-// />{" "} */}
-// served in a{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.mise}
-//   id={mise}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.mise}
-// </ButtonBase>{" "}
-// for ${data.price}
-// </Typography>
-// {/* start grapes */}
-// <Typography paragraph>
-// Grapes:{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.grape[0]}
-//   id={grape}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.grape[0]}
-// </ButtonBase>
-// {"  "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.grape[1]}
-//   id={grape}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.grape[1]}
-// </ButtonBase>
-// {"  "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.grape[2]}
-//   id={grape}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.grape[2]}
-// </ButtonBase>
-// </Typography>
-
-// {/* end grapes */}
-// <Typography paragraph>
-// description:{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description[2]}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description[2]}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description[3]}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description[3]}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description2}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description2}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description3}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description3}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description4}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description4}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description5}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description5}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description6}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description6}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description7}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description7}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description8}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description8}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description9}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description9}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description10}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description10}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description11}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description11}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description12}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description12}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description13}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description13}
-// </ButtonBase>{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.description14}
-//   id={description}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.description14}
-// </ButtonBase>
-// </Typography>
-// <Typography paragraph>
-// Appellation:{" "}
-// <ButtonBase
-//   className={classes.ButtonBase}
-//   value={data.appellation}
-//   id={appellation}
-//   onClick={event => onSelect(event)}
-// >
-//   {data.appellation}
-// </ButtonBase>

@@ -9,7 +9,7 @@ const DynamicDescription = () => {
             <label htmlFor={i} key={key}>
               <br></br>
               description {i}:
-              <Text field={field} id={i} />
+              <Text field={field} id={`desc${i}`} />
               <button type="button" onClick={remove}>
                 Remove description
               </button>

@@ -9,7 +9,7 @@ const DynamicGrapes = () => {
             <label htmlFor={i} key={key}>
               <br></br>
               grape {i + 1}:
-              <Text field={field} id={i} />
+              <Text field={field} id={`grape${i}`} />
               <button type="button" onClick={remove}>
                 Remove Grape
               </button>

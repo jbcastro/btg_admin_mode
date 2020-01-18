@@ -4,7 +4,6 @@ const DynamicArraysGrape = () => {
   const validateLength = touched => {
     return !touched ? "must" : undefined;
   };
-
   return (
     <div>
       <ArrayField field="grape" validate={validateLength} notify={["you must"]}>
@@ -13,7 +12,7 @@ const DynamicArraysGrape = () => {
             {fields.map(({ field, key, remove }, i) => (
               <label htmlFor={i} key={key}>
                 Grape {i + 1}:
-                <Text field={field} />
+                <Text field={field} id={`grape${i}`} />
                 <button onClick={add} type="button">
                   Add Grape
                 </button>{" "}
