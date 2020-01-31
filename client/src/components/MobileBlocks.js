@@ -36,9 +36,9 @@ import TextField from "@material-ui/core/TextField";
 // import MobileBar from "./MobileBar";
 
 const useStyles = makeStyles(theme => ({
-  // button: {
-  //   margin: theme.spacing(1)
-  // },
+  button: {
+    margin: theme.spacing(1)
+  },
 
   input: {
     display: "none"
@@ -69,8 +69,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "yellow",
     display: "inline-block",
     minHeight: 436,
-    overflow: "hidden",
-    display: "none"
+    overflow: "hidden"
+    // display: "none"
   },
   ButtonBase: {
     color: "blue"
@@ -78,9 +78,9 @@ const useStyles = makeStyles(theme => ({
   buttonHidden: {
     backgroundColor: "yellow"
   },
-  text: {
-    // display: "none"
-  },
+  // text: {
+  //   // display: "none"
+  // },
   AvatarButton: {
     fontSize: "1em"
   },
@@ -114,14 +114,6 @@ const useStyles = makeStyles(theme => ({
   },
   avatarSparkling: {
     backgroundColor: "blue"
-  },
-
-  lister: {
-    display: "inline"
-    // list-style-type: "circle"
-  },
-  paragraph: {
-    clear: "both"
   }
 }));
 
@@ -139,9 +131,6 @@ const MobileBlocks = ({
   handleDelete,
   onCurItemClear
 }) => {
-  // butt = data;
-  // const onSelect = props.onSelect;
-
   const grapes = "grapes";
   const year = "year";
   const place = "place";
@@ -273,7 +262,6 @@ const MobileBlocks = ({
     }
   }
 
-
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [deleteButtonEnable, setDeleteButton] = React.useState(true);
@@ -288,26 +276,29 @@ const MobileBlocks = ({
   };
   const handleEdit = () => {
     setEdit(!editEnable);
-    
   };
- 
+
   return (
-    <div>
     <Card className={checkStatus(data.status)} key={data._id} raised>
       <CardHeader title={data.name} />
 
       <span>
-      <button type="button" onClick={handleEdit}>Edit</button>
-      
+        <button type="button" onClick={handleEdit}>
+          Edit
+        </button>
+
         {editEnable ? (
-       
           <span>
-            <button type="button" hidden={!deleteButtonEnable} onClick={handleDelButton}>
+            <button
+              type="button"
+              hidden={!deleteButtonEnable}
+              onClick={handleDelButton}
+            >
               Delete?
             </button>
-          
+
             <button
-            type="button"
+              type="button"
               id="button2"
               hidden={deleteButtonEnable}
               onClick={e => handleDelete(data)}
@@ -316,7 +307,6 @@ const MobileBlocks = ({
             </button>
             <br></br>
             <br></br>
-            
 
             <Form
               id="form-api-form"
@@ -325,18 +315,18 @@ const MobileBlocks = ({
                 description: data.description
               }}
               onSubmit={handleUpdate}
-                // han}
             >
               <div>
                 <button type="submit">Save</button>
-                <button type="button" onClick={handleEdit}>Close</button>
+                <button type="button" onClick={handleEdit}>
+                  Close
+                </button>
                 <label>
                   <br></br>
                   <font size="1">Name:</font>
                   <Text
                     className={classes.text}
                     field="name"
-                    
                     initialValue={data.name}
                   ></Text>
                 </label>
@@ -346,7 +336,6 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="vinyard"
-                    
                     initialValue={data.vinyard}
                   ></Text>
                 </label>
@@ -366,7 +355,6 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="grapes"
-                    
                     initialValue={checkIfNull(data.grapes)}
                   ></Text>
                 </label>
@@ -375,8 +363,7 @@ const MobileBlocks = ({
                 {/* start of grapes */}
 
                 <DynamicGrapes />
-
-              
+                <DynamicDescription />
                 {/* end of grapes */}
                 <label>
                   <font size="1">Year:</font>
@@ -384,7 +371,6 @@ const MobileBlocks = ({
                     className={classes.text}
                     field="year"
                     type="number"
-                    
                     initialValue={data.year}
                   ></Text>
                 </label>
@@ -394,7 +380,6 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="place"
-                    
                     initialValue={data.place}
                   ></Text>
                 </label>
@@ -404,7 +389,6 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="area"
-                    
                     initialValue={data.area}
                   ></Text>
                 </label>
@@ -414,7 +398,6 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="country"
-                    
                     initialValue={data.country}
                   ></Text>
                 </label>
@@ -424,7 +407,6 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="appellation"
-                    
                     initialValue={data.appellation}
                   ></Text>
                 </label>
@@ -435,7 +417,6 @@ const MobileBlocks = ({
                     className={classes.text}
                     field="price"
                     type="number"
-                    
                     initialValue={data.price}
                   ></Text>
                 </label>
@@ -485,7 +466,6 @@ const MobileBlocks = ({
                       <TextArea
                         className={classes.text}
                         field="funfact"
-                        
                         initialValue={data.funfact}
                       ></TextArea>
                     </label>
@@ -496,8 +476,6 @@ const MobileBlocks = ({
           </span>
         ) : (
           <span>
-            
-            
             <Typography variant="body2" color="textSecondary" component="p">
               A {""}
               {coravinCheck(data.coravin)} {data.year} {data.grapes} by{" "}
@@ -550,9 +528,7 @@ const MobileBlocks = ({
         )}
       </span>
     </Card>
-    </div>
   );
 };
 
 export default MobileBlocks;
-

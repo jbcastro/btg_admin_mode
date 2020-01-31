@@ -16,7 +16,7 @@ const DynamicArraysGrape = () => {
                 <button onClick={add} type="button">
                   Add Grape
                 </button>{" "}
-                <button type="button" onClick={remove}  >
+                <button type="button" onClick={remove}>
                   Remove This Grape
                 </button>
                 <br></br>

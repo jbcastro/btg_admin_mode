@@ -4,6 +4,7 @@ import WineTable from "./WineTable";
 import AddEditForm from "./AddEditForm";
 import AddForm from "./AddForm";
 import MobileBlocksData from "./MobileBlocksData";
+import FormTest from "./FormTest";
 
 class App extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class App extends Component {
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handlePrevClick = this.handlePrevClick.bind(this);
     this.editCardChange = this.editCardChange.bind(this);
-    this.input = React.createRef()
+    this.input = React.createRef();
   }
 
   componentDidMount() {
@@ -68,11 +69,11 @@ class App extends Component {
     }
     return body;
   };
-// componentDidUpdate(prevProps,prevState,snapshot){
-//   if(this.props.glasses !==prevProps.glasses){
-//     this.callBackendAPI()
-//   }
-// }
+  // componentDidUpdate(prevProps,prevState,snapshot){
+  //   if(this.props.glasses !==prevProps.glasses){
+  //     this.callBackendAPI()
+  //   }
+  // }
   //set state as current item in order to delete or update
   handleSelect = event => {
     let id = event.target.id;
@@ -103,10 +104,13 @@ class App extends Component {
   };
 
   //for adding and updating
-  handleSubmit =(e)=> {
-    let name = e.name
-    let newItem = e
-    
+  handleSubmit = e => {
+    let name = e.name;
+    let newItem = e;
+    console.log(e._id);
+    this.setState({ curItem: newItem });
+    let kobe = this.state.curItem;
+    console.log(kobe._id);
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
@@ -122,23 +126,64 @@ class App extends Component {
           throw Error(`Request rejected with status ${res.status}`);
         }
       })
-      
-      .then(json => {
-          newItem._id = json._id
-          console.log(json)
-          this.setState(state=>{
-            const glasses = [...state.glasses, newItem]
-            return{
-              glasses,newItem:''
-            }
-          })
 
+      .then(json => {
+        let glassesArray;
+
+        console.log(newItem);
+        if (!newItem._id) {
+          glassesArray = this.state.glasses;
+          newItem._id = json._id;
+          glassesArray.unshift(newItem);
+        } else {
+          glassesArray = this.state.glasses.map(item => {
+            if (item._id === newItem._id) {
+              item = newItem;
+            }
+            return item;
+          });
+        }
+        this.setState({ glasses: glassesArray });
+
+        // newItem._id = json._id;
+        // console.log(json._id);
+        // this.setState(state => {
+        //   const glasses = [...state.glasses, newItem];
+        //   return {
+        //     glasses,
+        //     newItem: ""
+        //   };
+        // });
       })
+
       .catch(error => {
         console.log("this be your error brah" + error);
       });
+    return;
   };
-  handleUpdate = (e) => {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.glasses !== this.state.glasses) {
+      this.callBackendAPI()
+
+        .then(res => {
+          const glassesData = res.express;
+          // glassesData.sort(function(a, b) {
+          //   if (a.name < b.name) {
+          //     return -1;
+          //   }
+          //   if (a.name > b.name) {
+          //     return 1;
+          //   }
+          //   return 0;
+          // });
+
+          this.setState({ glasses: glassesData });
+          this.setState({ unFilteredWines: glassesData });
+        })
+        .catch(err => console.log(err));
+    }
+  }
+  handleUpdate = e => {
     let name = e.name;
     let newWine = e;
     // let oldWine = initialValue
@@ -152,28 +197,26 @@ class App extends Component {
       },
       body: JSON.stringify(newWine)
     })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw Error(`Request rejected with status ${res.status}`);
-      }
-    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw Error(`Request rejected with status ${res.status}`);
+        }
+      })
       .then(json => {
         let newData;
-       
-          // update existing item
-          newWine._id = e._id
-          console.log(newWine._id);
-          newData = this.state.glasses.map(item => {
-            if (item._id === newWine._id) {
-              item = newWine;
-            }
-            return item;
-          });
-        
 
-       
+        // update existing item
+        newWine._id = e._id;
+        console.log(newWine._id);
+        newData = this.state.glasses.map(item => {
+          if (item._id === newWine._id) {
+            item = newWine;
+          }
+          return item;
+        });
+
         this.setState({ glasses: newData });
       })
       .catch(error => {
@@ -284,6 +327,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Admin Mode</h1>
+        {/* <FormTest handleSubmit={this.handleSubmit} /> */}
         <AddForm
           handleSubmit={this.handleSubmit}
           curItem={this.state.curItem}

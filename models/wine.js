@@ -7,13 +7,13 @@ conn.on("error", console.error.bind(console, "connection error:"));
 var connectionString = connec.connectionString2;
 mongoose.connect(connectionString, { useNewUrlParser: true });
 
-
 var mySchema = mongoose.Schema(
   {
     // winenum: { type: String },
+    // _id: { type: Number },
     name: { type: String, require: true },
     vinyard: { type: String },
-    grape:[String],
+    grape: [String],
     grapes: { type: String },
     year: { type: String },
     place: { type: String },
@@ -21,7 +21,7 @@ var mySchema = mongoose.Schema(
     country: { type: String },
 
     appellation: { type: String },
-    description:[String],
+    description: [String],
 
     funfact: { type: String },
     timestamp: { type: Date },
