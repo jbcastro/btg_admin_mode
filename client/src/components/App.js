@@ -5,6 +5,7 @@ import AddEditForm from "./AddEditForm";
 import AddForm from "./AddForm";
 import MobileBlocksData from "./MobileBlocksData";
 import FormTest from "./FormTest";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 class App extends Component {
   constructor(props) {
@@ -107,87 +108,88 @@ class App extends Component {
   handleSubmit = e => {
     let name = e.name;
     let newItem = e;
-    console.log(e._id);
-    this.setState({ curItem: newItem });
-    let kobe = this.state.curItem;
-    console.log(kobe._id);
-    fetch(`http://localhost:5000/express_backend/add?=${name}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newItem)
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw Error(`Request rejected with status ${res.status}`);
-        }
+    if (!newItem._id) {
+      fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newItem)
       })
-
-      .then(json => {
-        let glassesArray;
-
-        console.log(newItem);
-        if (!newItem._id) {
-          glassesArray = this.state.glasses;
-          newItem._id = json._id;
-          glassesArray.unshift(newItem);
-        } else {
-          glassesArray = this.state.glasses.map(item => {
-            if (item._id === newItem._id) {
-              item = newItem;
-            }
-            return item;
-          });
-        }
-        this.setState({ glasses: glassesArray });
-
-        // newItem._id = json._id;
-        // console.log(json._id);
-        // this.setState(state => {
-        //   const glasses = [...state.glasses, newItem];
-        //   return {
-        //     glasses,
-        //     newItem: ""
-        //   };
-        // });
-      })
-
-      .catch(error => {
-        console.log("this be your error brah" + error);
-      });
-    return;
-  };
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.glasses !== this.state.glasses) {
-      this.callBackendAPI()
-
         .then(res => {
-          const glassesData = res.express;
-          // glassesData.sort(function(a, b) {
-          //   if (a.name < b.name) {
-          //     return -1;
-          //   }
-          //   if (a.name > b.name) {
-          //     return 1;
-          //   }
-          //   return 0;
-          // });
-
-          this.setState({ glasses: glassesData });
-          this.setState({ unFilteredWines: glassesData });
+          if (res.ok) {
+            console.log(newItem);
+            return res.json();
+          } else {
+            throw Error(`Request rejected with status ${res.status}`);
+          }
         })
-        .catch(err => console.log(err));
+
+        .then(json => {
+          this.setState(state => {
+            newItem._id = json._id;
+            console.log(newItem._id);
+            const glasses = [...state.glasses, newItem];
+
+            return {
+              glasses,
+
+              newItem: ""
+            };
+          });
+        })
+
+        .catch(error => {
+          console.log("this be your error brah" + error);
+        });
+      return;
+    } else {
+      fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newItem)
+      })
+        .then(res => {
+          if (res.ok) {
+            console.log(newItem);
+            return res.json();
+          } else {
+            throw Error(`Request rejected with status ${res.status}`);
+          }
+        })
+
+        .then(json => {
+          this.setState(state => {
+            newItem._id = json._id;
+            console.log(newItem._id);
+            const glasses = [...state.glasses, newItem];
+
+            return {
+              glasses,
+
+              newItem: ""
+            };
+          });
+        })
+
+        .catch(error => {
+          console.log("this be your error brah" + error);
+        });
+      return;
     }
-  }
+    // console.log(e.name);
+  };
+
   handleUpdate = e => {
     let name = e.name;
     let newWine = e;
     // let oldWine = initialValue
     console.log(newWine);
+    console.log(e._id);
     // console.log(oldWine)
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
       method: "PUT",
@@ -208,10 +210,10 @@ class App extends Component {
         let newData;
 
         // update existing item
-        newWine._id = e._id;
+        newWine._id = json._id;
         console.log(newWine._id);
         newData = this.state.glasses.map(item => {
-          if (item._id === newWine._id) {
+          if (item.name === newWine.name) {
             item = newWine;
           }
           return item;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Form,
@@ -19,23 +19,88 @@ import DynamicArraysDesc from "./DynamicArrraysDesc";
 import { PromiseProvider } from "mongoose";
 
 const AddForm = props => {
-  const handleNextClick = props.handleNextClick;
-  const handlePrevClick = props.handlePrevClick;
-  const onCurItemClear = props.onCurItemClear;
   const handleSubmit = props.handleSubmit;
+  const handleUpdate = props.handleUpdate;
+  let laura = false;
 
+  // const formState = useFormState();
+  // function castro() {
+  //   handleSubmit(formState);
+  // }
+
+  // const aButton = formState => {
+  //   if (laura == false) {
+  //     {
+  //       console.log(formState.touched);
+  //     }
+  //   } else {
+  //     {
+  //       console.log("yo");
+  //     }
+  //   }
+  // };
+
+  // function myFunction(items) {
+  //   if (items._id == true) {
+  //     putu = handleUpdate;
+  //   } else {
+  //     putu = handleSubmit;
+  //   }
+  //   return putu;
+  // }
+
+  // const myFunction = item => {
+  //   if (item._id === true) {
+  //     laura = true;
+  //   } else {
+  //     laura = false;
+  //   }
+  // };
+  // const doSubmit = (evt)=>{
+  //   {handleSubmit}
+  //   console.log("brah")
+  // }
+  const formState = useFormState();
+  console.log(formState);
+
+  // let butt;
+  // if (laura === false) {
+  //   butt = { handleSubmit };
+  // } else {
+  //   butt = { handleUpdate };
+  const [addButton, updateButton] = React.useState(true);
+
+  const handleUpdateAndSubmit = () => {
+    updateButton(!addButton);
+  };
+  // }
+  // function myFunction(addButton, touched) {
+  //   if (touched._id == true) {
+  //     return (addButton = false);
+  //   } else {
+  //     return (addButton = true);
+  //   }
+  // }
+  let putu;
+  var handleStuff = addButton ? (putu = handleSubmit) : (putu = handleUpdate);
   return (
     <Form
       id="myForm"
       initialValues={{ grape: [""], description: [""] }}
-      onSubmit={handleSubmit}
+      onSubmit={putu}
     >
       {({ formApi, formState }) => (
         <div>
-          {/* <code>{JSON.stringify(formState.values)}</code>
+          <button type="button" onClick={handleUpdateAndSubmit}>
+            change
+          </button>
+          {/* <ComponentUsingFormState /> */}
+          <code>{JSON.stringify(formState.values)}</code>
           <label>Touched:</label>
           <code>{JSON.stringify(formState.touched)}</code>
-          <br></br> */}
+          {/* <code>{myFunction(formState.touched)}</code> */}
+          {/* <code>{JSON.stringify(formApi)}</code> */}
+          <br></br>
           <label>
             id
             <Text value="" field="_id" disabled />

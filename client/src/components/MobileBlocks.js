@@ -445,7 +445,7 @@ const MobileBlocks = ({
                     <Option value="krug">Krug Flute</Option>
                   </Select>
                 </label>
-                <DynamicDescription />
+                {/* <DynamicDescription /> */}
                 <CardActions disableSpacing>
                   <IconButton
                     className={clsx(classes.expand, {
