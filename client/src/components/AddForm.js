@@ -22,78 +22,23 @@ const AddForm = props => {
   const handleSubmit = props.handleSubmit;
   const handleUpdate = props.handleUpdate;
   let laura = false;
+  const onCurItemClear = props.onCurItemClear;
+  const setCurItemStuff = props.setCurItemStuff;
 
-  // const formState = useFormState();
-  // function castro() {
-  //   handleSubmit(formState);
-  // }
-
-  // const aButton = formState => {
-  //   if (laura == false) {
-  //     {
-  //       console.log(formState.touched);
-  //     }
-  //   } else {
-  //     {
-  //       console.log("yo");
-  //     }
-  //   }
-  // };
-
-  // function myFunction(items) {
-  //   if (items._id == true) {
-  //     putu = handleUpdate;
-  //   } else {
-  //     putu = handleSubmit;
-  //   }
-  //   return putu;
-  // }
-
-  // const myFunction = item => {
-  //   if (item._id === true) {
-  //     laura = true;
-  //   } else {
-  //     laura = false;
-  //   }
-  // };
-  // const doSubmit = (evt)=>{
-  //   {handleSubmit}
-  //   console.log("brah")
-  // }
   const formState = useFormState();
   console.log(formState);
 
-  // let butt;
-  // if (laura === false) {
-  //   butt = { handleSubmit };
-  // } else {
-  //   butt = { handleUpdate };
-  const [addButton, updateButton] = React.useState(true);
-
-  const handleUpdateAndSubmit = () => {
-    updateButton(!addButton);
-  };
-  // }
-  // function myFunction(addButton, touched) {
-  //   if (touched._id == true) {
-  //     return (addButton = false);
-  //   } else {
-  //     return (addButton = true);
-  //   }
-  // }
-  let putu;
-  var handleStuff = addButton ? (putu = handleSubmit) : (putu = handleUpdate);
   return (
     <Form
       id="myForm"
       initialValues={{ grape: [""], description: [""] }}
-      onSubmit={putu}
+      onSubmit={handleSubmit}
     >
       {({ formApi, formState }) => (
         <div>
-          <button type="button" onClick={handleUpdateAndSubmit}>
+          {/* <button type="button" onClick={handleUpdateAndSubmit}>
             change
-          </button>
+          </button> */}
           {/* <ComponentUsingFormState /> */}
           <code>{JSON.stringify(formState.values)}</code>
           <label>Touched:</label>
@@ -107,46 +52,46 @@ const AddForm = props => {
           </label>
           <label>
             Name:
-            <Text value="" field="name" />
+            <Text value="" field="name" onBlur={props.onChange} />
           </label>{" "}
           <label>
             Vinyard:
-            <Text field="vinyard" />
+            <Text field="vinyard" onBlur={props.onChange} />
           </label>{" "}
           <label>
             Grapes:
-            <Text field="grapes" />
+            <Text field="grapes" onBlur={props.onChange} />
           </label>{" "}
           <label>
             Year:
-            <Text field="year" type="number" />
+            <Text field="year" type="number" onBlur={props.onChange} />
           </label>
-          <DynamicArraysGrape />
-          <DynamicArraysDesc />
+          <DynamicArraysGrape onBlur={props.onChange} />
+          <DynamicArraysDesc onBlur={props.onChange} />
           <label>
             Place:
-            <Text field="place" />
+            <Text field="place" onBlur={props.onChange} />
           </label>{" "}
           <label>
             Area:
-            <Text field="area" />
+            <Text field="area" onBlur={props.onChange} />
           </label>{" "}
           <label>
             Country:
-            <Text field="country" />
+            <Text field="country" onBlur={props.onChange} />
           </label>{" "}
           <label>
             Appellation:
-            <Text field="appellation" />
+            <Text field="appellation" onBlur={props.onChange} />
           </label>{" "}
           <label>
             Price:
-            <Text field="price" type="number" />
+            <Text field="price" type="number" onBlur={props.onChange} />
           </label>
           <br></br>
           <label>
             Mise:
-            <Select field="mise" initialValue="ap">
+            <Select field="mise" initialValue="ap" onBlur={props.onChange}>
               <Option value="ap">AP</Option>
 
               <Option value="burg"> BURG</Option>
@@ -186,10 +131,16 @@ const AddForm = props => {
           <br></br>
           <label>
             Fun Fact:
-            <TextArea field="funfact" />
+            <TextArea field="funfact" onBlur={props.onChange} />
           </label>
           <button type="submit">submit</button>
-          <button type="button" onClick={() => formApi.reset()}>
+          <button
+            type="button"
+            onClick={event => {
+              formApi.reset();
+              onCurItemClear();
+            }}
+          >
             Reset
           </button>
         </div>

@@ -355,7 +355,7 @@ const MobileBlocks = ({
                   <Text
                     className={classes.text}
                     field="grapes"
-                    initialValue={checkIfNull(data.grapes)}
+                    initialValue={data.grapes}
                   ></Text>
                 </label>
                 <br></br>
@@ -445,7 +445,7 @@ const MobileBlocks = ({
                     <Option value="krug">Krug Flute</Option>
                   </Select>
                 </label>
-                {/* <DynamicDescription /> */}
+                <DynamicDescription />
                 <CardActions disableSpacing>
                   <IconButton
                     className={clsx(classes.expand, {

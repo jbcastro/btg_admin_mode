@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MobileBlocks from "./MobileBlocks";
 
 const MobileBlocksData = ({
@@ -13,9 +13,11 @@ const MobileBlocksData = ({
   handleSubmit,
   handleUpdate,
   handleDelete,
-  onCurItemClear
+  onCurItemClear,
+  props
 }) => {
   const data = glasses;
+  console.log(data);
 
   const cells = data.map(data => {
     return (

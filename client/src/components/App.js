@@ -17,13 +17,13 @@ class App extends Component {
       curItem: {},
       filteredWines: [],
       unFilteredWines: [],
-
+      count: 0,
       showMyComponent: false,
       addFormHidden: false,
       editCard: false
     };
     this.handleSelect = this.handleSelect.bind(this);
-
+    this.setCurItemStuff = this.setCurItemStuff.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
@@ -106,27 +106,35 @@ class App extends Component {
 
   //for adding and updating
   handleSubmit = e => {
-    let name = e.name;
-    let newItem = e;
-    if (!newItem._id) {
-      fetch(`http://localhost:5000/express_backend/add?=${name}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newItem)
-      })
-        .then(res => {
-          if (res.ok) {
-            console.log(newItem);
-            return res.json();
-          } else {
-            throw Error(`Request rejected with status ${res.status}`);
-          }
-        })
+    let newItem = this.state.curItem;
+    let name = newItem.name;
+    newItem.mise = e.mise;
+    newItem.color = e.color;
+    newItem.status = e.status;
+    newItem.coravin = e.coravin;
+    newItem.grape = e.grape;
+    newItem.description = e.description;
 
-        .then(json => {
+    fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newItem)
+    })
+      .then(res => {
+        if (res.ok) {
+          console.log(newItem);
+          return res.json();
+        } else {
+          throw Error(`Request rejected with status ${res.status}`);
+        }
+      })
+
+      .then(json => {
+        let newData;
+        if (!newItem._id) {
           this.setState(state => {
             newItem._id = json._id;
             console.log(newItem._id);
@@ -138,52 +146,83 @@ class App extends Component {
               newItem: ""
             };
           });
-        })
-
-        .catch(error => {
-          console.log("this be your error brah" + error);
-        });
-      return;
-    } else {
-      fetch(`http://localhost:5000/express_backend/add?=${name}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newItem)
-      })
-        .then(res => {
-          if (res.ok) {
-            console.log(newItem);
-            return res.json();
-          } else {
-            throw Error(`Request rejected with status ${res.status}`);
-          }
-        })
-
-        .then(json => {
-          this.setState(state => {
-            newItem._id = json._id;
-            console.log(newItem._id);
-            const glasses = [...state.glasses, newItem];
-
-            return {
-              glasses,
-
-              newItem: ""
-            };
+        } else {
+          newData = this.state.glasses.map(item => {
+            if (item._id === newItem._id) {
+              item = newItem;
+            }
+            return item;
           });
-        })
+          this.setState({ glasses: newData });
+        }
+      })
 
-        .catch(error => {
-          console.log("this be your error brah" + error);
-        });
-      return;
-    }
+      .catch(error => {
+        console.log("this be your error brah" + error);
+      });
     // console.log(e.name);
   };
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.curItem._id !== prevState.curItem._id) {
+  //     var crud = [...this.state.glasses, this.state.curItem];
+  //     this.setState({ glasses: crud });
+  //   }
+  // }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.count !== this.state.count) {
+  //     const newWine = this.state.curItem;
+  //     const name = newWine.name;
+  //     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json"
+  //       },
+  //       body: JSON.stringify(newWine)
+  //     })
+  //       .then(res => {
+  //         if (res.ok) {
+  //           return res.json();
+  //         } else {
+  //           throw Error(`Request rejected with status ${res.status}`);
+  //         }
+  //       })
 
+  //       .then((json, newData) => {
+  //         if (!newWine._id) {
+  //           newData = this.state.glasses;
+  //           newWine._id = json._id;
+
+  //           newData.unshift(newWine);
+  //           console.log("dude");
+  //         } else {
+  //           newData = this.state.glasses.map(item => {
+  //             if (item._id === newWine._id) {
+  //               item = newWine;
+  //             }
+  //             console.log("brto");
+  //             return item;
+  //           });
+  //         }
+  //         this.setState({ glasses: newData });
+  //       })
+
+  //       .catch(error => {
+  //         console.log("this be your error brah" + error);
+  //       });
+
+  //     // console.log(e.name);
+  //     // this.setState({ glasses: glasses1 });
+  //   }
+  // }
+
+  setCurItemStuff = e => {
+    // this.setState({ curItem: e });
+
+    this.setState(({ count }) => ({
+      count: count + 1
+    }));
+  };
   handleUpdate = e => {
     let name = e.name;
     let newWine = e;
@@ -233,6 +272,7 @@ class App extends Component {
 
     this.setState({ curItem: newItem });
   };
+
   //filter to just wines that have the features ie certain grapes, area, etc
   // onSelect = event => {
   //   let value = event.target.value.toLowerCase();
@@ -340,6 +380,8 @@ class App extends Component {
           handlePrevClick={this.handlePrevClick}
           glasses={this.state.glasses}
           handleUpdate={this.handleUpdate}
+          setCurItemStuff={this.setCurItemStuff}
+          onChange={this.onChange}
         />
 
         {/* 
