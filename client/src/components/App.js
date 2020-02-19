@@ -37,6 +37,7 @@ class App extends Component {
     this.handlePrevClick = this.handlePrevClick.bind(this);
     this.editCardChange = this.editCardChange.bind(this);
     this.input = React.createRef();
+    this.onBlur = this.onBlur.bind(this);
   }
 
   componentDidMount() {
@@ -76,9 +77,9 @@ class App extends Component {
   //   }
   // }
   //set state as current item in order to delete or update
-  handleSelect = event => {
-    let id = event.target.id;
-
+  handleSelect = e => {
+    let id = e;
+    console.log("bro");
     const glasses = this.state.glasses;
 
     glasses.map(result => {
@@ -163,10 +164,16 @@ class App extends Component {
     // console.log(e.name);
   };
   // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.curItem._id !== prevState.curItem._id) {
-  //     var crud = [...this.state.glasses, this.state.curItem];
-  //     this.setState({ glasses: crud });
+  //   if (this.state.curItem !== prevState.curItem) {
+  //     let newData = this.state.glasses.map(item => {
+  //       if ((item._id = this.state.curItem._id)) {
+  //         item = this.state.curItem;
+  //       }
+  //       return item;
+  //     });
+  //     this.setState({ glasses: newData });
   //   }
+  // }
   // }
   // componentDidUpdate(prevProps, prevState) {
   //   if (prevState.count !== this.state.count) {
@@ -224,41 +231,53 @@ class App extends Component {
     }));
   };
   handleUpdate = e => {
-    let name = e.name;
-    let newWine = e;
+    let newItem = this.state.curItem;
+    let name = newItem.name;
+    newItem.grape = e.grape;
+    newItem.description = e.description;
     // let oldWine = initialValue
-    console.log(newWine);
-    console.log(e._id);
+
     // console.log(oldWine)
     fetch(`http://localhost:5000/express_backend/add?=${name}`, {
-      method: "PUT",
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(newWine)
+      body: JSON.stringify(newItem)
     })
       .then(res => {
         if (res.ok) {
+          console.log(newItem);
           return res.json();
         } else {
           throw Error(`Request rejected with status ${res.status}`);
         }
       })
+
       .then(json => {
         let newData;
+        if (!newItem._id) {
+          this.setState(state => {
+            newItem._id = json._id;
+            console.log(newItem._id);
+            const glasses = [...state.glasses, newItem];
 
-        // update existing item
-        newWine._id = json._id;
-        console.log(newWine._id);
-        newData = this.state.glasses.map(item => {
-          if (item.name === newWine.name) {
-            item = newWine;
-          }
-          return item;
-        });
+            return {
+              glasses,
 
-        this.setState({ glasses: newData });
+              newItem: ""
+            };
+          });
+        } else {
+          newData = this.state.glasses.map(item => {
+            if (item._id === newItem._id) {
+              item = newItem;
+            }
+            return item;
+          });
+          this.setState({ glasses: newData });
+        }
       })
       .catch(error => {
         console.log("this be your error brah" + error);
@@ -269,6 +288,14 @@ class App extends Component {
   onChange = event => {
     var newItem = this.state.curItem;
     newItem[event.target.name] = event.target.value;
+    console.log(event.target);
+
+    this.setState({ curItem: newItem });
+  };
+  onBlur = event => {
+    var newItem = this.state.curItem;
+    newItem[event.target.id] = event.target.value;
+    console.log(event.target.id);
 
     this.setState({ curItem: newItem });
   };
@@ -410,6 +437,7 @@ class App extends Component {
           handleUpdate={this.handleUpdate}
           handleDelete={this.handleDelete}
           onCurItemClear={this.onCurItemClear}
+          onBlur={this.onBlur}
         />
       </div>
     );

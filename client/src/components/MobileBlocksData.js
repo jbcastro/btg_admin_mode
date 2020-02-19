@@ -14,7 +14,8 @@ const MobileBlocksData = ({
   handleUpdate,
   handleDelete,
   onCurItemClear,
-  props
+  props,
+  onBlur
 }) => {
   const data = glasses;
   console.log(data);
@@ -35,6 +36,7 @@ const MobileBlocksData = ({
         handleSubmit={handleSubmit}
         handleDelete={handleDelete}
         onCurItemClear={onCurItemClear}
+        onBlur
       />
     );
   });

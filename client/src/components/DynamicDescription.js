@@ -1,11 +1,12 @@
 import React from "react";
 import { Form, Text, ArrayField } from "informed";
-const DynamicDescription = () => {
+import { PromiseProvider } from "mongoose";
+const DynamicDescription = ({ onChange }) => {
   return (
     <ArrayField field="description">
       {({ add, fields }) => (
         <>
-          {fields.map(({ field, key, remove }, i) => (
+          {fields.map(({ field, key, remove, value }, i) => (
             <label htmlFor={i} key={key}>
               <br></br>
               description {i + 1}:

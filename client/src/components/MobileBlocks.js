@@ -28,7 +28,8 @@ import {
   Option,
   Scope,
   useFormState,
-  useArrayField
+  useArrayField,
+  ArrayField
 } from "informed";
 import { Button, createMuiTheme, Hidden } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
@@ -129,7 +130,9 @@ const MobileBlocks = ({
   handleSubmit,
   handleUpdate,
   handleDelete,
-  onCurItemClear
+  onCurItemClear,
+  props,
+  onBlur
 }) => {
   const grapes = "grapes";
   const year = "year";
@@ -277,14 +280,29 @@ const MobileBlocks = ({
   const handleEdit = () => {
     setEdit(!editEnable);
   };
+  const handleSelect2 = data => {
+    handleEdit();
+    handleSelect(data);
+  };
+  const closeIt = () => {
+    handleEdit();
+    onCurItemClear();
+  };
 
   return (
     <Card className={checkStatus(data.status)} key={data._id} raised>
       <CardHeader title={data.name} />
 
       <span>
-        <button type="button" onClick={handleEdit}>
-          Edit
+        <button
+          type="button"
+          // onClick={event => {
+          //   handleEdit();
+          //   handleSelect(event);
+          // }}
+          onClick={() => handleSelect2(data._id)}
+        >
+          Edit it brah
         </button>
 
         {editEnable ? (
@@ -296,7 +314,9 @@ const MobileBlocks = ({
             >
               Delete?
             </button>
-
+            <br></br>
+            While a card is in edit mode another wine cannot be added. Please
+            close this before adding a new wine
             <button
               type="button"
               id="button2"
@@ -307,171 +327,189 @@ const MobileBlocks = ({
             </button>
             <br></br>
             <br></br>
-
             <Form
               id="form-api-form"
-              initialValues={{
-                grape: data.grape,
-                description: data.description
-              }}
               onSubmit={handleUpdate}
+              initialValues={{
+                grape: curItem.grape,
+                description: curItem.description
+              }}
             >
-              <div>
-                <button type="submit">Save</button>
-                <button type="button" onClick={handleEdit}>
-                  Close
-                </button>
-                <label>
-                  <br></br>
-                  <font size="1">Name:</font>
-                  <Text
-                    className={classes.text}
-                    field="name"
-                    initialValue={data.name}
-                  ></Text>
-                </label>
-                <br></br>
-                <label>
-                  <font size="1">Vinyard:</font>
-                  <Text
-                    className={classes.text}
-                    field="vinyard"
-                    initialValue={data.vinyard}
-                  ></Text>
-                </label>
-
-                <label>
-                  <font size="1">id:</font>
-                  <Text
-                    className={classes.text}
-                    field="_id"
-                    disabled={true}
-                    initialValue={data._id}
-                  ></Text>
-                </label>
-                <br></br>
-                <label>
-                  <font size="1">Grapes:</font>
-                  <Text
-                    className={classes.text}
-                    field="grapes"
-                    initialValue={data.grapes}
-                  ></Text>
-                </label>
-                <br></br>
-
-                {/* start of grapes */}
-
-                <DynamicGrapes />
-                <DynamicDescription />
-                {/* end of grapes */}
-                <label>
-                  <font size="1">Year:</font>
-                  <Text
-                    className={classes.text}
-                    field="year"
-                    type="number"
-                    initialValue={data.year}
-                  ></Text>
-                </label>
-                <br></br>
-                <label>
-                  <font size="1">Place:</font>
-                  <Text
-                    className={classes.text}
-                    field="place"
-                    initialValue={data.place}
-                  ></Text>
-                </label>
-                <br></br>
-                <label>
-                  <font size="1">Area:</font>
-                  <Text
-                    className={classes.text}
-                    field="area"
-                    initialValue={data.area}
-                  ></Text>
-                </label>
-                <br></br>
-                <label>
-                  <font size="1">Country:</font>
-                  <Text
-                    className={classes.text}
-                    field="country"
-                    initialValue={data.country}
-                  ></Text>
-                </label>
-                <br></br>
-                <label>
-                  <font size="1">Appellation:</font>
-                  <Text
-                    className={classes.text}
-                    field="appellation"
-                    initialValue={data.appellation}
-                  ></Text>
-                </label>
-                <br></br>
-                <label>
-                  <font size="1">Price:</font>
-                  <Text
-                    className={classes.text}
-                    field="price"
-                    type="number"
-                    initialValue={data.price}
-                  ></Text>
-                </label>
-
-                <br></br>
-                <label>
-                  Status:
-                  <Select field="status">
-                    <Option value="">{data.status}</Option>
-                    <Option value="none">None</Option>
-                    <Option value="added">Added</Option>
-                    <Option value="removed">Removed</Option>
-                    <Option value="hidden">Hidden</Option>
-                  </Select>
-                </label>
-                <br></br>
-                <label>
-                  Mise:
-                  <Select field="mise">
-                    <Option value="">{data.mise}</Option>
-                    <Option value="ap">AP</Option>
-                    <Option value="burg">BURG</Option>
-                    <Option value="dbx">BDX</Option>
-                    <Option value="flute">Flute</Option>
-                    <Option value="dw ">DW</Option>
-                    <Option value="krug">Krug Flute</Option>
-                  </Select>
-                </label>
-                <DynamicDescription />
-                <CardActions disableSpacing>
-                  <IconButton
-                    className={clsx(classes.expand, {
-                      [classes.expandOpen]: expanded
-                    })}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                  >
-                    <ExpandMoreIcon />
-                  </IconButton>
-                </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <CardContent>
+              {({ formApi, formState }) => (
+                <div>
+                  <button type="submit">Save</button>
+                  <button type="button" onClick={closeIt}>
+                    Close
+                  </button>
+                  <label>
                     <br></br>
-                    <label>
-                      <font size="1">Fun Fact:</font>
-                      <TextArea
-                        className={classes.text}
-                        field="funfact"
-                        initialValue={data.funfact}
-                      ></TextArea>
-                    </label>
-                  </CardContent>
-                </Collapse>
-              </div>
+                    <font size="1">Name:</font>
+                    <Text
+                      className={classes.text}
+                      field="name"
+                      initialValue={curItem.name}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    <font size="1">Vinyard:</font>
+                    <Text
+                      className={classes.text}
+                      field="vinyard"
+                      initialValue={curItem.vinyard}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <label>
+                    <font size="1">id:</font>
+                    <Text
+                      className={classes.text}
+                      field="_id"
+                      disabled={true}
+                      initialValue={curItem._id}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    <font size="1">Grapes:</font>
+                    <Text
+                      className={classes.text}
+                      field="grapes"
+                      initialValue={curItem.grapes}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  {/* start of grapes */}
+                  <DynamicGrapes onChange={onChange} data={data} />
+                  {/* {DynamicDescription} */}
+                  <DynamicDescription
+                    onChange={onChange}
+                    data={data.description}
+                  />
+                  {/* end of grapes */}
+                  <label>
+                    <font size="1">Year:</font>
+                    <Text
+                      className={classes.text}
+                      field="year"
+                      type="number"
+                      initialValue={curItem.year}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    <font size="1">Place:</font>
+                    <Text
+                      className={classes.text}
+                      field="place"
+                      initialValue={curItem.place}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    <font size="1">Area:</font>
+                    <Text
+                      className={classes.text}
+                      field="area"
+                      initialValue={curItem.area}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    <font size="1">Country:</font>
+                    <Text
+                      className={classes.text}
+                      field="country"
+                      initialValue={curItem.country}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    <font size="1">Appellation:</font>
+                    <Text
+                      className={classes.text}
+                      field="appellation"
+                      initialValue={curItem.appellation}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    <font size="1">Price:</font>
+                    <Text
+                      className={classes.text}
+                      field="price"
+                      type="number"
+                      initialValue={curItem.price}
+                      onBlur={onChange}
+                    ></Text>
+                  </label>
+                  <br></br>
+                  <label>
+                    Status:
+                    <Select
+                      field="status"
+                      initialValue={curItem.status}
+                      onBlur={onChange}
+                    >
+                      <Option value="">{curItem.status}</Option>
+                      <Option value="none">None</Option>
+                      <Option value="added">Added</Option>
+                      <Option value="removed">Removed</Option>
+                      <Option value="hidden">Hidden</Option>
+                    </Select>
+                  </label>
+                  <br></br>
+                  <label>
+                    Mise:
+                    <Select
+                      field="mise"
+                      initialValue={curItem.mise}
+                      onBlur={onChange}
+                    >
+                      <Option value="">{curItem.mise}</Option>
+                      <Option value="ap">AP</Option>
+                      <Option value="burg">BURG</Option>
+                      <Option value="dbx">BDX</Option>
+                      <Option value="flute">Flute</Option>
+                      <Option value="dw ">DW</Option>
+                      <Option value="krug">Krug Flute</Option>
+                    </Select>
+                  </label>
+                  <CardActions disableSpacing>
+                    <IconButton
+                      className={clsx(classes.expand, {
+                        [classes.expandOpen]: expanded
+                      })}
+                      onClick={handleExpandClick}
+                      aria-expanded={expanded}
+                      aria-label="show more"
+                    >
+                      <ExpandMoreIcon />
+                    </IconButton>
+                  </CardActions>
+                  <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+                      <br></br>
+                      <label>
+                        <font size="1">Fun Fact:</font>
+                        <TextArea
+                          className={classes.text}
+                          field="funfact"
+                          initialValue={curItem.funfact}
+                          onBlur={onChange}
+                        ></TextArea>
+                      </label>
+                    </CardContent>
+                  </Collapse>
+                </div>
+              )}
             </Form>
           </span>
         ) : (
@@ -488,6 +526,12 @@ const MobileBlocks = ({
                 <li key={index}>
                   {" "}
                   Grape{index + 1}: {result}
+                </li>
+              ))}
+              {data.description.map((result, index) => (
+                <li key={index}>
+                  {" "}
+                  Desc{index + 1}: {result} ||
                 </li>
               ))}
             </Typography>
@@ -512,13 +556,6 @@ const MobileBlocks = ({
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                {data.description.map((result, index) => (
-                  <li key={index}>
-                    {" "}
-                    Desc{index + 1}: {result} ||
-                  </li>
-                ))}
-
                 <Typography paragraph className={classes.paragraph}>
                   Fun Fact: {data.funfact}
                 </Typography>

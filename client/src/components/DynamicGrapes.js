@@ -1,11 +1,11 @@
 import React from "react";
 import { Form, Text, ArrayField } from "informed";
-const DynamicGrapes = () => {
+const DynamicGrapes = ({ onChange }) => {
   return (
     <ArrayField field="grape">
       {({ add, fields }) => (
         <>
-          {fields.map(({ field, key, remove }, i) => (
+          {fields.map(({ field, key, remove, value }, i) => (
             <label htmlFor={i} key={key}>
               <br></br>
               grape {i + 1}:
