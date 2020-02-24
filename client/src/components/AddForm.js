@@ -26,7 +26,7 @@ const AddForm = props => {
   const setCurItemStuff = props.setCurItemStuff;
 
   const formState = useFormState();
-  console.log(formState);
+  // console.log(formState);
 
   return (
     <Form
@@ -40,9 +40,9 @@ const AddForm = props => {
             change
           </button> */}
           {/* <ComponentUsingFormState /> */}
-          <code>{JSON.stringify(formState.values)}</code>
+          {/* <code>{JSON.stringify(formState.values)}</code>
           <label>Touched:</label>
-          <code>{JSON.stringify(formState.touched)}</code>
+          <code>{JSON.stringify(formState.touched)}</code> */}
           {/* <code>{myFunction(formState.touched)}</code> */}
           {/* <code>{JSON.stringify(formApi)}</code> */}
           <br></br>

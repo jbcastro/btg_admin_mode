@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Text, ArrayField } from "informed";
 import { PromiseProvider } from "mongoose";
-const DynamicDescription = ({ onChange }) => {
+const DynamicDescription = ({ onBlur }) => {
   return (
     <ArrayField field="description">
       {({ add, fields }) => (
@@ -10,7 +10,7 @@ const DynamicDescription = ({ onChange }) => {
             <label htmlFor={i} key={key}>
               <br></br>
               description {i + 1}:
-              <Text field={field} id={`description${i}`} />
+              <Text field={field} id={`description${i}`} onBlur={onBlur} />
               <button type="button" onClick={remove}>
                 Remove description
               </button>

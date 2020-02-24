@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useStyles from "./UseStyles";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -9,7 +10,8 @@ import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
+import EditForm from "./EditForm";
+
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -29,94 +31,13 @@ import {
   Scope,
   useFormState,
   useArrayField,
-  ArrayField
+  ArrayField,
+  useFormApi
 } from "informed";
 import { Button, createMuiTheme, Hidden } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 
 // import MobileBar from "./MobileBar";
-
-const useStyles = makeStyles(theme => ({
-  button: {
-    margin: theme.spacing(1)
-  },
-
-  input: {
-    display: "none"
-  },
-  card: {
-    maxWidth: 345,
-    display: "inline-block",
-    minHeight: 436,
-    overflow: "hidden"
-  },
-  cardAdded: {
-    maxWidth: 345,
-    backgroundColor: "#E6E6FA",
-    display: "inline-block",
-    minHeight: 436,
-    overflow: "hidden"
-  },
-  cardRemoved: {
-    maxWidth: 345,
-    backgroundColor: "#FFA07A",
-    display: "inline-block",
-    minHeight: 436,
-    overflow: "hidden"
-  },
-
-  cardHidden: {
-    maxWidth: 345,
-    backgroundColor: "yellow",
-    display: "inline-block",
-    minHeight: 436,
-    overflow: "hidden"
-    // display: "none"
-  },
-  ButtonBase: {
-    color: "blue"
-  },
-  buttonHidden: {
-    backgroundColor: "yellow"
-  },
-  // text: {
-  //   // display: "none"
-  // },
-  AvatarButton: {
-    fontSize: "1em"
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%" // 16:9
-  },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest
-    })
-  },
-  expandOpen: {
-    transform: "rotate(180deg)"
-  },
-  avatarRed: {
-    backgroundColor: red[500]
-  },
-  avatarWhite: {
-    backgroundColor: "black"
-  },
-  avatarDessert: {
-    backgroundColor: "yellow",
-    color: "black"
-  },
-  avatarCorovan: {
-    backgroundColor: "green"
-  },
-  avatarSparkling: {
-    backgroundColor: "blue"
-  }
-}));
 
 const MobileBlocks = ({
   data,
@@ -126,13 +47,17 @@ const MobileBlocks = ({
   editCardChange,
   editCard,
   curItem,
+  curEditItem,
+  unEditedItem,
   onChange,
   handleSubmit,
   handleUpdate,
   handleDelete,
   onCurItemClear,
   props,
-  onBlur
+  onBlur,
+  disableOtherEdits,
+  setDisableOtherEdits
 }) => {
   const grapes = "grapes";
   const year = "year";
@@ -197,13 +122,6 @@ const MobileBlocks = ({
     }
   }
 
-  // function descGrapeList(list) {
-  //   const listResult = list.map((result, index) => (
-  //     <li key={index}>{result}</li>
-  //   ));
-  //   return <ul>{listResult}</ul>;
-  // }
-
   function checkIfNull(data) {
     if (data != null) {
       return data;
@@ -212,10 +130,10 @@ const MobileBlocks = ({
     }
   }
   //span
-  let curItemId = curItem._id;
+  let curEditItemId = curEditItem._id;
 
-  function checkIfCurItem(id) {
-    if (curItemId === id) {
+  function checkIfcurEditItem(id) {
+    if (curEditItemId === id) {
       return true;
     }
   }
@@ -269,7 +187,7 @@ const MobileBlocks = ({
   const [expanded, setExpanded] = React.useState(false);
   const [deleteButtonEnable, setDeleteButton] = React.useState(true);
   const [editEnable, setEdit] = React.useState(false);
-  // const [editEnable2, setEdit2] = React.useState(t);
+  const [disableSave, setDisabledSave] = useState(true);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -282,11 +200,38 @@ const MobileBlocks = ({
   };
   const handleSelect2 = data => {
     handleEdit();
-    handleSelect(data);
+    handleSelect(data._id);
+    setDisableOtherEdits();
   };
+
+  // const touchedLength = obj => {
+  //   if (Object.keys(obj).length > 0) {
+  //     setDisabledSave(!disableSave);
+  //   }
+  // };
+  const handleSave = event => {
+    handleUpdate(event);
+    setDisabledSave(prevState => true);
+  };
+
   const closeIt = () => {
     handleEdit();
     onCurItemClear();
+    setDisableOtherEdits();
+  };
+  const cancelIt = () => {
+    handleEdit();
+    onCurItemClear();
+    setDisableOtherEdits();
+  };
+
+  const onBlurValidate = event => {
+    onBlur(event);
+    setDisabledSave(prevState => false);
+    console.log(event.target);
+  };
+  const dynamicBlurValidate = () => {
+    setDisabledSave(prevState => false);
   };
 
   return (
@@ -294,16 +239,13 @@ const MobileBlocks = ({
       <CardHeader title={data.name} />
 
       <span>
-        <button
-          type="button"
-          // onClick={event => {
-          //   handleEdit();
-          //   handleSelect(event);
-          // }}
-          onClick={() => handleSelect2(data._id)}
-        >
-          Edit it brah
-        </button>
+        {disableOtherEdits ? (
+          ""
+        ) : (
+          <button type="button" onClick={() => handleSelect2(data)}>
+            Edit it brah
+          </button>
+        )}
 
         {editEnable ? (
           <span>
@@ -315,8 +257,7 @@ const MobileBlocks = ({
               Delete?
             </button>
             <br></br>
-            While a card is in edit mode another wine cannot be added. Please
-            close this before adding a new wine
+
             <button
               type="button"
               id="button2"
@@ -326,190 +267,207 @@ const MobileBlocks = ({
               Are you Sure You Want to Delete?
             </button>
             <br></br>
+            {disableSave ? "" : "DATA IS UNSAVED"}
             <br></br>
             <Form
               id="form-api-form"
-              onSubmit={handleUpdate}
+              onSubmit={handleSave}
               initialValues={{
-                grape: curItem.grape,
-                description: curItem.description
+                grape: data.grape,
+                description: data.description
               }}
+              // onChange={formState => touchedLength(formState.touched)}
             >
-              {({ formApi, formState }) => (
-                <div>
-                  <button type="submit">Save</button>
+              <div>
+                {/* <code>{JSON.stringify(formState.touched)}</code> */}
+                <button type="submit" disabled={disableSave}>
+                  Save
+                </button>
+                {disableSave ? (
                   <button type="button" onClick={closeIt}>
                     Close
                   </button>
-                  <label>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={e => {
+                      if (
+                        window.confirm(
+                          "Are you sure you wish to not save this item?"
+                        )
+                      )
+                        closeIt();
+                    }}
+                  >
+                    Cancel
+                  </button>
+                )}
+
+                <label>
+                  <br></br>
+                  <font size="1">Name:</font>
+                  <Text
+                    className={classes.text}
+                    field="name"
+                    initialValue={data.name}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Vinyard:</font>
+                  <Text
+                    className={classes.text}
+                    field="vinyard"
+                    initialValue={data.vinyard}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <label>
+                  <font size="1">id:</font>
+                  <Text
+                    className={classes.text}
+                    field="_id"
+                    disabled={true}
+                    initialValue={data._id}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Grapes:</font>
+                  <Text
+                    className={classes.text}
+                    field="grapes"
+                    initialValue={data.grapes}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                {/* start of grapes */}
+                <DynamicGrapes onBlur={dynamicBlurValidate} data={data} />
+                {/* {DynamicDescription} */}
+                <DynamicDescription onBlur={dynamicBlurValidate} data={data} />
+                {/* end of grapes */}
+                <label>
+                  <font size="1">Year:</font>
+                  <Text
+                    className={classes.text}
+                    field="year"
+                    type="number"
+                    initialValue={data.year}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Place:</font>
+                  <Text
+                    className={classes.text}
+                    field="place"
+                    initialValue={data.place}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Area:</font>
+                  <Text
+                    className={classes.text}
+                    field="area"
+                    initialValue={data.area}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Country:</font>
+                  <Text
+                    className={classes.text}
+                    field="country"
+                    initialValue={data.country}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Appellation:</font>
+                  <Text
+                    className={classes.text}
+                    field="appellation"
+                    initialValue={data.appellation}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  <font size="1">Price:</font>
+                  <Text
+                    className={classes.text}
+                    field="price"
+                    type="number"
+                    initialValue={data.price}
+                    onBlur={event => onBlurValidate(event)}
+                  ></Text>
+                </label>
+                <br></br>
+                <label>
+                  Status:
+                  <Select
+                    field="status"
+                    initialValue={data.status}
+                    onBlur={event => onBlurValidate(event)}
+                  >
+                    <Option value="">{data.status}</Option>
+                    <Option value="none">None</Option>
+                    <Option value="added">Added</Option>
+                    <Option value="removed">Removed</Option>
+                    <Option value="hidden">Hidden</Option>
+                  </Select>
+                </label>
+                <br></br>
+                <label>
+                  Mise:
+                  <Select
+                    field="mise"
+                    initialValue={data.mise}
+                    onBlur={event => onBlurValidate(event)}
+                  >
+                    <Option value="">{data.mise}</Option>
+                    <Option value="ap">AP</Option>
+                    <Option value="burg">BURG</Option>
+                    <Option value="dbx">BDX</Option>
+                    <Option value="flute">Flute</Option>
+                    <Option value="dw ">DW</Option>
+                    <Option value="krug">Krug Flute</Option>
+                  </Select>
+                </label>
+                <CardActions disableSpacing>
+                  <IconButton
+                    className={clsx(classes.expand, {
+                      [classes.expandOpen]: expanded
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <CardContent>
                     <br></br>
-                    <font size="1">Name:</font>
-                    <Text
-                      className={classes.text}
-                      field="name"
-                      initialValue={curItem.name}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Vinyard:</font>
-                    <Text
-                      className={classes.text}
-                      field="vinyard"
-                      initialValue={curItem.vinyard}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <label>
-                    <font size="1">id:</font>
-                    <Text
-                      className={classes.text}
-                      field="_id"
-                      disabled={true}
-                      initialValue={curItem._id}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Grapes:</font>
-                    <Text
-                      className={classes.text}
-                      field="grapes"
-                      initialValue={curItem.grapes}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  {/* start of grapes */}
-                  <DynamicGrapes onChange={onChange} data={data} />
-                  {/* {DynamicDescription} */}
-                  <DynamicDescription
-                    onChange={onChange}
-                    data={data.description}
-                  />
-                  {/* end of grapes */}
-                  <label>
-                    <font size="1">Year:</font>
-                    <Text
-                      className={classes.text}
-                      field="year"
-                      type="number"
-                      initialValue={curItem.year}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Place:</font>
-                    <Text
-                      className={classes.text}
-                      field="place"
-                      initialValue={curItem.place}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Area:</font>
-                    <Text
-                      className={classes.text}
-                      field="area"
-                      initialValue={curItem.area}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Country:</font>
-                    <Text
-                      className={classes.text}
-                      field="country"
-                      initialValue={curItem.country}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Appellation:</font>
-                    <Text
-                      className={classes.text}
-                      field="appellation"
-                      initialValue={curItem.appellation}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    <font size="1">Price:</font>
-                    <Text
-                      className={classes.text}
-                      field="price"
-                      type="number"
-                      initialValue={curItem.price}
-                      onBlur={onChange}
-                    ></Text>
-                  </label>
-                  <br></br>
-                  <label>
-                    Status:
-                    <Select
-                      field="status"
-                      initialValue={curItem.status}
-                      onBlur={onChange}
-                    >
-                      <Option value="">{curItem.status}</Option>
-                      <Option value="none">None</Option>
-                      <Option value="added">Added</Option>
-                      <Option value="removed">Removed</Option>
-                      <Option value="hidden">Hidden</Option>
-                    </Select>
-                  </label>
-                  <br></br>
-                  <label>
-                    Mise:
-                    <Select
-                      field="mise"
-                      initialValue={curItem.mise}
-                      onBlur={onChange}
-                    >
-                      <Option value="">{curItem.mise}</Option>
-                      <Option value="ap">AP</Option>
-                      <Option value="burg">BURG</Option>
-                      <Option value="dbx">BDX</Option>
-                      <Option value="flute">Flute</Option>
-                      <Option value="dw ">DW</Option>
-                      <Option value="krug">Krug Flute</Option>
-                    </Select>
-                  </label>
-                  <CardActions disableSpacing>
-                    <IconButton
-                      className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded
-                      })}
-                      onClick={handleExpandClick}
-                      aria-expanded={expanded}
-                      aria-label="show more"
-                    >
-                      <ExpandMoreIcon />
-                    </IconButton>
-                  </CardActions>
-                  <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-                      <br></br>
-                      <label>
-                        <font size="1">Fun Fact:</font>
-                        <TextArea
-                          className={classes.text}
-                          field="funfact"
-                          initialValue={curItem.funfact}
-                          onBlur={onChange}
-                        ></TextArea>
-                      </label>
-                    </CardContent>
-                  </Collapse>
-                </div>
-              )}
+                    <label>
+                      <font size="1">Fun Fact:</font>
+                      <TextArea
+                        className={classes.text}
+                        field="funfact"
+                        initialValue={data.funfact}
+                        onBlur={event => onBlurValidate(event)}
+                      ></TextArea>
+                    </label>
+                  </CardContent>
+                </Collapse>
+              </div>
             </Form>
           </span>
         ) : (

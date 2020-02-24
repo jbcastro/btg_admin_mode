@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Text, ArrayField } from "informed";
-const DynamicGrapes = ({ onChange }) => {
+const DynamicGrapes = ({ onBlur }) => {
   return (
     <ArrayField field="grape">
       {({ add, fields }) => (
@@ -9,7 +9,7 @@ const DynamicGrapes = ({ onChange }) => {
             <label htmlFor={i} key={key}>
               <br></br>
               grape {i + 1}:
-              <Text field={field} id={`grape${i}`} />
+              <Text field={field} id={`grape${i}`} onBlur={onBlur} />
               <button type="button" onClick={remove}>
                 Remove Grape
               </button>
