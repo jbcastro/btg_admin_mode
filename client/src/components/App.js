@@ -50,21 +50,17 @@ class App extends Component {
 
       .then(res => {
         const glassesData = res.express;
-        glassesData.sort(function(item) {
-          if (item.status.added) {
-            return -2;
-          }
-          if (item.status.removed) {
-            return -1;
-          }
-          if (item.status.none) {
-            return 1;
-          }
-          if (item.status.hidden) {
-            return 2;
-          }
-          return 0;
-        });
+        // var aux = { removed: 1, added: 2, none: 3, hidden: 4 };
+        // glassesData.sort(function(a, b) {
+        //   return aux[a.status] - aux[b.status];
+        // });
+        const order = {
+          removed: 1,
+          added: 2,
+          none: 3,
+          hidden: 4
+        };
+        glassesData.sort((a, b) => order[a.status] - order[b.status]);
         // glassesData.sort(function(a, b) {
 
         //   if (a.status > b.status) {

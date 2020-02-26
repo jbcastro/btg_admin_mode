@@ -51,14 +51,3 @@ const MobileBlocksData = ({
   return <div className="MobileBlock">{cells}</div>;
 };
 export default MobileBlocksData;
-
-// var objects = [
-//   { name: "steve", status: added },
-//   { name: "john", status: added },
-//   { name: "drew", status: none },
-//   { name: "aaron", status: none },
-//   { name: "jeff", status: hidden },
-//   { name: "gil", status: hidden },
-//   { name: "marc", status: removed },
-//   { name: "bill", status: removed }
-// ];
