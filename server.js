@@ -13,7 +13,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.engine("html", require("ejs").renderFile);
+// app.engine("html", require("ejs").renderFile);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./client/public"));
