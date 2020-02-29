@@ -22,8 +22,8 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // app.get('/express_backend', (req, res) => {
 //   res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
 // });
-app.get("./client", function(req, res) {
-  res.render("index");
+app.get("/", function(req, res) {
+  res.render("index", {});
 });
 app.get("/express_backend", (req, res, next) => {
   wineMethods
