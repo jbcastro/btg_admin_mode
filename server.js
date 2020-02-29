@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.engine("html", require("ejs").renderFile);
 
 app.set("view engine", "html");
+app.set("views", path.join(__dirname, "views"));
 
 // console.log that your server is up and running
 app.listen(port, () => console.log(`Listening on port ${port}`));
@@ -23,7 +24,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 //   res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
 // });
 app.get("/", function(req, res) {
-  res.render("/client/index", {});
+  res.render("client/index", {});
 });
 app.get("/express_backend", (req, res, next) => {
   wineMethods
