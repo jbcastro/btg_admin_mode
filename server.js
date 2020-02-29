@@ -23,7 +23,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.get("/", function(req, res) {
   res.render("index", {});
 });
-app.get("/express_backend", (req, res, next) => {
+app.get("/api", (req, res, next) => {
   wineMethods
     .getAll()
     .then(items => {
@@ -35,7 +35,7 @@ app.get("/express_backend", (req, res, next) => {
     });
 });
 
-app.get("/express_backend/get/", (req, res, next) => {
+app.get("/api/get/", (req, res, next) => {
   wineMethods
     .getOne(req.query._id)
     .then(items => {
@@ -46,7 +46,7 @@ app.get("/express_backend/get/", (req, res, next) => {
     });
 });
 
-app.get("/express_backend/delete", (req, res, next) => {
+app.get("/api/delete", (req, res, next) => {
   wineMethods
     .killOne(req.query._id)
     .then(items => {
@@ -57,7 +57,7 @@ app.get("/express_backend/delete", (req, res, next) => {
     });
 });
 
-app.put("/express_backend/add", (req, res, next) => {
+app.put("/api/add", (req, res, next) => {
   Wines.updateOne(
     {
       _id: req.body._id
@@ -92,7 +92,7 @@ app.put("/express_backend/add", (req, res, next) => {
   );
 });
 
-app.post("/express_backend/add", (req, res, next) => {
+app.post("/api/add", (req, res, next) => {
   if (!req.body._id) {
     let wine = new Wines(
       // {

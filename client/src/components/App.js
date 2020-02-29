@@ -80,7 +80,7 @@ class App extends Component {
   }
   // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
   callBackendAPI = async () => {
-    const response = await fetch("/express_backend");
+    const response = await fetch("/api");
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -109,7 +109,7 @@ class App extends Component {
   handleDelete = e => {
     let id = e._id;
 
-    fetch(`/express_backend/delete?_id=${id}`)
+    fetch(`./api/delete?_id=${id}`)
       .then(response => {
         return response.json();
       })
@@ -132,7 +132,7 @@ class App extends Component {
     newItem.grape = e.grape;
     newItem.description = e.description;
 
-    fetch(`/add?=${name}`, {
+    fetch(`./api/add?=${name}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -198,7 +198,7 @@ class App extends Component {
     // let oldWine = initialValue
 
     // console.log(oldWine)
-    fetch(`/express_backend/add?=${name}`, {
+    fetch(`./api/add?=${name}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
