@@ -1,6 +1,8 @@
 const express = require("express");
 var cors = require("cors");
 
+const path = require("path");
+
 const app = express();
 app.use(cors());
 const port = process.env.PORT || 5000;
@@ -10,21 +12,16 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.engine("html", require("ejs").renderFile);
 
-app.set("view engine", "html");
-// app.set("views", path.join(__dirname, "views"));
-
-// console.log that your server is up and running
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "./client"));
+app.use(express.static(path.join(__dirname, "./client")));
 app.listen(port, () => console.log(`Listening on port ${port}`));
-// app.get("/", require("./client/public/index"));
 
-// create a GET route
-// app.get('/express_backend', (req, res) => {
-//   res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' });
-// });
 app.get("/", function(req, res) {
-  res.render("/client/views/index", {});
+  res.render("/index", {});
 });
 app.get("/express_backend", (req, res, next) => {
   wineMethods
