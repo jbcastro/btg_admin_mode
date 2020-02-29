@@ -109,7 +109,7 @@ class App extends Component {
   handleDelete = e => {
     let id = e._id;
 
-    fetch(`http://localhost:5000/express_backend/delete?_id=${id}`)
+    fetch(`/express_backend/delete?_id=${id}`)
       .then(response => {
         return response.json();
       })
@@ -132,7 +132,7 @@ class App extends Component {
     newItem.grape = e.grape;
     newItem.description = e.description;
 
-    fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+    fetch(`/add?=${name}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -198,7 +198,7 @@ class App extends Component {
     // let oldWine = initialValue
 
     // console.log(oldWine)
-    fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+    fetch(`/express_backend/add?=${name}`, {
       method: "POST",
       headers: {
         Accept: "application/json",

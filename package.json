@@ -7,6 +7,7 @@
   "private": true,
   "dependencies": {
     "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
     "consolidate": "^0.15.1",
     "cors": "^2.8.5",
     "create-react-app": "^3.2.0",
@@ -28,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently \"nodemon server.js\" \"cd client && npm start\""
   },
   "proxy": "http://localhost:5000/",
   "eslintConfig": {
