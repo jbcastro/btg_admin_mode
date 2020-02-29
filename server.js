@@ -16,12 +16,12 @@ app.use(bodyParser.json());
 app.engine("html", require("ejs").renderFile);
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "./client"));
-app.use(express.static(path.join(__dirname, "./client")));
+app.set("views", path.join(__dirname, "./client/public"));
+app.use(express.static(path.join(__dirname, "./client/public")));
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.get("/", function(req, res) {
-  res.render("/index", {});
+  res.render("index", {});
 });
 app.get("/express_backend", (req, res, next) => {
   wineMethods
