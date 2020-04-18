@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import "./styles/App.css";
 import WineTable from "./WineTable";
 import AddEditForm from "./AddEditForm";
+import AddForm from "./AddForm";
+import MobileBlocksData from "./MobileBlocksData";
+import FormTest from "./FormTest";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 class App extends Component {
   constructor(props) {
@@ -11,24 +15,33 @@ class App extends Component {
       glass: {},
       filter: "",
       curItem: {},
+      curEditItem: {},
       filteredWines: [],
       unFilteredWines: [],
-
+      count: 0,
       showMyComponent: false,
-      addFormHidden: false
+      addFormHidden: false,
+      editCard: false,
+      unEditedItem: {},
+      disableOtherEdits: false
     };
     this.handleSelect = this.handleSelect.bind(this);
-    this.handleOnClick = this.handleOnClick.bind(this);
+    this.setCurItemStuff = this.setCurItemStuff.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
-
-    this.onSelect = this.onSelect.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    // this.onSelect = this.onSelect.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onClear = this.onClear.bind(this);
     this.onCurItemClear = this.onCurItemClear.bind(this);
     this.showAddForm = this.showAddForm.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handlePrevClick = this.handlePrevClick.bind(this);
+    this.editCardChange = this.editCardChange.bind(this);
+    this.input = React.createRef();
+    this.setDisableOtherEdits = this.setDisableOtherEdits.bind(this);
   }
 
   componentDidMount() {
@@ -37,9 +50,28 @@ class App extends Component {
 
       .then(res => {
         const glassesData = res.express;
-        glassesData.sort(
-          (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated)
-        );
+        // var aux = { removed: 1, added: 2, none: 3, hidden: 4 };
+        // glassesData.sort(function(a, b) {
+        //   return aux[a.status] - aux[b.status];
+        // });
+        const order = {
+          removed: 1,
+          added: 2,
+          none: 3,
+          hidden: 4
+        };
+        glassesData.sort((a, b) => order[a.status] - order[b.status]);
+        // glassesData.sort(function(a, b) {
+
+        //   if (a.status > b.status) {
+        //     return 1;
+        //   }
+        //   if (a.status < b.status) {
+        //     return -1;
+        //   }
+        //   return 0;
+
+        // });
 
         this.setState({ glasses: glassesData });
         this.setState({ unFilteredWines: glassesData });
@@ -48,7 +80,7 @@ class App extends Component {
   }
   // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
   callBackendAPI = async () => {
-    const response = await fetch("/express_backend");
+    const response = await fetch("/api");
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -56,25 +88,28 @@ class App extends Component {
     }
     return body;
   };
-
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.curEditItem !== prevState.curEditItem) {
+  //     console.log("dude");
+  //   }
+  // }
   //set state as current item in order to delete or update
-  handleSelect = event => {
-    let id = event.target.id;
-
+  handleSelect = e => {
+    let id = e;
     const glasses = this.state.glasses;
 
     glasses.map(result => {
       if (result._id === id) {
-        return this.setState({ curItem: result });
+        this.setState({ curEditItem: result });
       }
     });
   };
 
   //delete item
-  handleOnClick = () => {
-    let id = this.state.curItem._id;
+  handleDelete = e => {
+    let id = e._id;
 
-    fetch(`http://localhost:5000/express_backend/delete?_id=${id}`)
+    fetch(`./api/delete?_id=${id}`)
       .then(response => {
         return response.json();
       })
@@ -82,101 +117,201 @@ class App extends Component {
         const remainder = this.state.glasses.filter(item => {
           return item._id !== id;
         });
-        this.setState({ glasses: remainder, curItem: {} });
+        this.setState({ glasses: remainder, e: {} });
       });
   };
 
   //for adding and updating
-  handleSubmit() {
-    let name = this.state.curItem.name;
-    let newWine = this.state.curItem;
-    fetch(`http://localhost:5000/express_backend/add?=${name}`, {
+  handleSubmit = e => {
+    let newItem = this.state.curItem;
+    let name = newItem.name;
+    newItem.mise = e.mise;
+    newItem.color = e.color;
+    newItem.status = e.status;
+    newItem.coravin = e.coravin;
+    newItem.grape = e.grape;
+    newItem.description = e.description;
+
+    fetch(`./api/add?=${name}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(newWine)
+      body: JSON.stringify(newItem)
     })
-      .then(res => res.json())
-      .then(json => {
-        let glassesArray;
-        if (!newWine._id) {
-          glassesArray = this.state.glasses;
-
-          newWine._id = json._id;
-          glassesArray.push(newWine);
-          this.setState({ glasses: glassesArray });
+      .then(res => {
+        if (res.ok) {
+          console.log(newItem);
+          return res.json();
         } else {
-          glassesArray = this.state.glasses.map(item => {
-            if (item._id === newWine._id) {
-              item = newWine;
+          throw Error(`Request rejected with status ${res.status}`);
+        }
+      })
+
+      .then(json => {
+        let newData;
+        if (!newItem._id) {
+          this.setState(state => {
+            newItem._id = json._id;
+            console.log(newItem._id);
+            const glasses = [...state.glasses, newItem];
+
+            return {
+              glasses,
+
+              newItem: ""
+            };
+          });
+        } else {
+          newData = this.state.glasses.map(item => {
+            if (item._id === newItem._id) {
+              item = newItem;
             }
             return item;
           });
+          this.setState({ glasses: newData });
         }
-        this.setState({ glasses: glassesArray });
+      })
+
+      .catch(error => {
+        console.log("this be your error brah" + error);
       });
-  }
+    // console.log(e.name);
+  };
+
+  setCurItemStuff = e => {
+    // this.setState({ curItem: e });
+
+    this.setState(({ count }) => ({
+      count: count + 1
+    }));
+  };
+  handleUpdate = e => {
+    let newItem = this.state.curEditItem;
+    let name = newItem.name;
+    newItem.grape = e.grape;
+    newItem.description = e.description;
+    newItem.status = e.status;
+    newItem.mise = e.mise;
+    newItem.funfact = e.funfact;
+    // let oldWine = initialValue
+
+    // console.log(oldWine)
+    fetch(`./api/add?=${name}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newItem)
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw Error(`Request rejected with status ${res.status}`);
+        }
+      })
+
+      .then(json => {
+        let newData;
+        if (!newItem._id) {
+          this.setState(state => {
+            newItem._id = json._id;
+            console.log(newItem._id);
+            const glasses = [...state.glasses, newItem];
+
+            return {
+              glasses,
+
+              newItem: ""
+            };
+          });
+        } else {
+          newData = this.state.glasses.map(item => {
+            if (item._id === newItem._id) {
+              item = newItem;
+            }
+            return item;
+          });
+          this.setState({ glasses: newData });
+        }
+      })
+      .catch(error => {
+        console.log("this be your error brah" + error);
+      });
+  };
 
   //making whatever is typed in as current item
   onChange = event => {
     var newItem = this.state.curItem;
     newItem[event.target.name] = event.target.value;
-    this.setState({ curItem: newItem });
+    console.log(event.target);
+  };
+  onBlur = event => {
+    let name = event.target.name;
+    let value = event.target.value;
+
+    this.setState(prevState => ({
+      curEditItem: {
+        ...prevState.curEditItem,
+        name: value
+      }
+    }));
   };
 
   //filter to just wines that have the features ie certain grapes, area, etc
-  onSelect = event => {
-    let value = event.target.value.toLowerCase();
-    const id = event.target.id;
+  // onSelect = event => {
+  //   let value = event.target.value.toLowerCase();
+  //   const id = event.target.id;
 
-    // if(value==!null){
-    //   return value.toLowerCase()
-    // }
-    const glasses = this.state.glasses;
+  //   // if(value==!null){
+  //   //   return value.toLowerCase()
+  //   // }
+  //   const glasses = this.state.glasses;
 
-    var grapes = glasses.filter(result => {
-      if (value === "grapes") {
-        return result.grapes === id;
-      } else if (value === "grape") {
-        return (
-          result.grape1 === id || result.grape2 === id || result.grape3 === id
-        );
-      } else if (value === "vinyard") {
-        return result.vinyard === id;
-      } else if (value === "year") {
-        return result.year === id;
-      } else if (value === "place") {
-        return result.place === id;
-      } else if (value === "area") {
-        return result.area === id;
-      } else if (value === "country") {
-        return result.country === id;
-      } else if (value === "appellation") {
-        return result.appellation === id;
-      } else if (value === "place") {
-        return result.place === id;
-      } else if (value === "description") {
-        return (
-          result.description1 === id ||
-          result.description2 === id ||
-          result.description3 === id ||
-          result.description4 === id ||
-          result.description5 === id ||
-          result.description6 === id ||
-          result.description7 === id ||
-          result.description8 === id ||
-          result.description9 === id ||
-          result.description10 === id
-        );
-      } else {
-        return result.color === id;
-      }
-    });
+  //   var grapes = glasses.filter(result => {
+  //     if (value === "grapes") {
+  //       return result.grapes === id;
+  //     } else if (value === "grape") {
+  //       return (
+  //         result.grape1 === id || result.grape2 === id || result.grape3 === id
+  //       );
+  //     } else if (value === "vinyard") {
+  //       return result.vinyard === id;
+  //     } else if (value === "year") {
+  //       return result.year === id;
+  //     } else if (value === "place") {
+  //       return result.place === id;
+  //     } else if (value === "area") {
+  //       return result.area === id;
+  //     } else if (value === "country") {
+  //       return result.country === id;
+  //     } else if (value === "appellation") {
+  //       return result.appellation === id;
+  //     } else if (value === "place") {
+  //       return result.place === id;
+  //     } else if (value === "description") {
+  //       return (
+  //         result.description1 === id ||
+  //         result.description2 === id ||
+  //         result.description3 === id ||
+  //         result.description4 === id ||
+  //         result.description5 === id ||
+  //         result.description6 === id ||
+  //         result.description7 === id ||
+  //         result.description8 === id ||
+  //         result.description9 === id ||
+  //         result.description10 === id
+  //       );
+  //     } else {
+  //       return result.color === id;
+  //     }
+  //   });
 
-    this.setState({ glasses: grapes });
-  };
+  //   this.setState({ glasses: grapes });
+  // };
 
   onClick = () => {
     this.setState(state => ({ showMyComponent: !this.state.showMyComponent }));
@@ -187,7 +322,7 @@ class App extends Component {
     this.setState({ glasses: unFilteredWines1 });
   };
   onCurItemClear = () => {
-    this.setState({ curItem: {} });
+    this.setState({ curEditItem: {} });
   };
   showAddForm = () => {
     this.setState(state => ({ addFormHidden: !this.state.addFormHidden }));
@@ -207,7 +342,14 @@ class App extends Component {
     let nextIndex = index - 1;
     this.setState({ curItem: glasses[nextIndex] });
   };
-
+  editCardChange = () => {
+    this.setState(state => ({ editCard: !this.state.editCard }));
+  };
+  setDisableOtherEdits = () => {
+    this.setState(state => ({
+      disableOtherEdits: !this.state.disableOtherEdits
+    }));
+  };
   ///render portion
 
   //
@@ -216,53 +358,58 @@ class App extends Component {
   //
 
   render() {
-    if (!this.state.addFormHidden) {
-      return (
-        <div className="App">
-          <h1>Admin Mode</h1>
+    return (
+      <div className="App">
+        <h1>Admin Mode</h1>
+        {/* <FormTest handleSubmit={this.handleSubmit} /> */}
+        <AddForm
+          handleSubmit={this.handleSubmit}
+          curItem={this.state.curItem}
+          onChange={this.onChange}
+          handleDelete={this.handleDelete}
+          onCurItemClear={this.onCurItemClear}
+          handleNextClick={this.handleNextClick}
+          handlePrevClick={this.handlePrevClick}
+          glasses={this.state.glasses}
+          handleUpdate={this.handleUpdate}
+          setCurItemStuff={this.setCurItemStuff}
+          onChange={this.onChange}
+        />
 
+        {/* 
           <AddEditForm
             handleSubmit={this.handleSubmit}
             curItem={this.state.curItem}
             onChange={this.onChange}
-            handleOnClick={this.handleOnClick}
+            handleDelete={this.handleDelete}
             onCurItemClear={this.onCurItemClear}
             handleNextClick={this.handleNextClick}
             handlePrevClick={this.handlePrevClick}
             glasses={this.state.glasses}
-          />
-          <WineTable
-            glasses={this.state.glasses}
-            handleSelect={this.handleSelect}
-            wines={this.state.filteredWines}
-            match={this.props.match}
-            onSelect={this.onSelect}
-            onClick={this.onClick}
-            showMyComponent={this.state.showMyComponent}
-            onClear={this.onClear}
-            showAddForm={this.showAddForm}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <div className="App">
-          <h1>Admin Mode</h1>
-
-          <WineTable
-            glasses={this.state.glasses}
-            handleSelect={this.handleSelect}
-            wines={this.state.filteredWines}
-            match={this.props.match}
-            onSelect={this.onSelect}
-            onClick={this.onClick}
-            showMyComponent={this.state.showMyComponent}
-            onClear={this.onClear}
-            showAddForm={this.showAddForm}
-          />
-        </div>
-      );
-    }
+          /> */}
+        <MobileBlocksData
+          glasses={this.state.glasses}
+          wines={this.state.filteredWines}
+          onSelect={this.onSelect}
+          onClear={this.onClear}
+          curItem={this.state.curItem}
+          curEditItem={this.state.curEditItem}
+          unEditedItem={this.unEditedItem}
+          mappedGlasses={this.state.mappedGlasses}
+          handleSelect={this.handleSelect}
+          editCardChange={this.editCardChange}
+          editCard={this.state.editCard}
+          onChange={this.onChange}
+          handleSubmit={this.handleSubmit}
+          handleUpdate={this.handleUpdate}
+          handleDelete={this.handleDelete}
+          onCurItemClear={this.onCurItemClear}
+          onBlur={this.onBlur}
+          setDisableOtherEdits={this.setDisableOtherEdits}
+          disableOtherEdits={this.state.disableOtherEdits}
+        />
+      </div>
+    );
   }
 }
 
