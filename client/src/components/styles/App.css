@@ -1,0 +1,64 @@
+.App {
+  text-align: center;
+  clear: both;
+}
+.MobileBar {
+  width: 100%;
+
+  position: fixed;
+
+  display: block;
+  opacity: 1;
+  background-color: white;
+  z-index: 1000;
+}
+.MobileBlock {
+  width: 100%;
+
+  padding-top: 120px;
+
+  z-index: 1;
+  clear: both;
+  height: auto;
+  display: inline-block;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+
+  /* padding: 8px; */
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+li {
+  list-style-type: none;
+}
+p.border {
+  border-style: solid;
+}
+
+p.hidden {
+  display: none;
+}
+label.nobreak {
+  white-space: nowrap;
+}
+.Howto {
+  /* float: left; */
+}
+.AddForm {
+  clear: both;
+}
+.MuiCardHeader-title {
+  font-size: xx-small;
+}
