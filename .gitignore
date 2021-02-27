@@ -24,6 +24,6 @@ yarn-error.log*
 
 #ignore wine.js
 
-
+models/connection.js
 # Local Netlify folder
 .netlify
