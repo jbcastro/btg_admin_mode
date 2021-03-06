@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "./styles/App.css";
 import WineTable from "./WineTable";
 import AddEditForm from "./AddEditForm";
@@ -29,7 +30,7 @@ class App extends Component {
       editCard: false,
       unEditedItem: {},
       disableOtherEdits: false,
-      loggedIn: true,
+      // loggedIn: false,
     };
     this.handleSelect = this.handleSelect.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -266,10 +267,14 @@ class App extends Component {
 
   render() {
     let loggedIn = this.state.loggedIn;
+    let glasses = this.state.glasses.length
     return (
       <div className="App">
-        {loggedIn ? (
-          <span>
+        {glasses===0 ?(
+          <h1>Loading</h1>
+        ):(
+          loggedIn ?(
+            <span>
             <HowTo />
             <p></p>
             <AddForm
@@ -307,12 +312,58 @@ class App extends Component {
               disableOtherEdits={this.state.disableOtherEdits}
             />
           </span>
-        ) : (
-          <Login setLogIn={this.setLogIn} />
+          ):(
+            <Login setLogIn={this.setLogIn} />
+          )
         )}
-      </div>
-    );
-  }
+        </div>
+    )
+}
 }
 
 export default App;
+// {{loggedIn ? (
+//           <span>
+//             <HowTo />
+//             <p></p>
+//             <AddForm
+//               handleSubmit={this.handleSubmit}
+//               curItem={this.state.curItem}
+//               onChange={this.onChange}
+//               handleDelete={this.handleDelete}
+//               onCurItemClear={this.onCurItemClear}
+//               handleNextClick={this.handleNextClick}
+//               handlePrevClick={this.handlePrevClick}
+//               glasses={this.state.glasses}
+//               handleUpdate={this.handleUpdate}
+//               setCurItemStuff={this.setCurItemStuff}
+//             />
+
+//             <MobileBlocksData
+//               glasses={this.state.glasses}
+//               wines={this.state.filteredWines}
+//               onSelect={this.onSelect}
+//               onClear={this.onClear}
+//               curItem={this.state.curItem}
+//               curEditItem={this.state.curEditItem}
+//               unEditedItem={this.unEditedItem}
+//               mappedGlasses={this.state.mappedGlasses}
+//               handleSelect={this.handleSelect}
+//               editCardChange={this.editCardChange}
+//               editCard={this.state.editCard}
+//               onChange={this.onChange}
+//               handleSubmit={this.handleSubmit}
+//               handleUpdate={this.handleUpdate}
+//               handleDelete={this.handleDelete}
+//               onCurEditItemClear={this.onCurEditItemClear}
+//               onBlur={this.onBlur}
+//               setDisableOtherEdits={this.setDisableOtherEdits}
+//               disableOtherEdits={this.state.disableOtherEdits}
+//             />
+//           </span>
+//         ) : (
+//           <Login setLogIn={this.setLogIn} />
+//         )}
+      
+//     );
+//   } 

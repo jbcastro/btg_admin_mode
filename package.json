@@ -23,8 +23,8 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-scripts": "^3.3.0",
-    "typescript": "^3.7.5",
-    "webpack-dev-server": "^3.11.0"
+    "typescript": "^3.7.5"
+    
   },
   "scripts": {
     "server": "node server.js",

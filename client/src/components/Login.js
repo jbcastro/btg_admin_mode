@@ -20,7 +20,7 @@ export default class Login extends Component {
   
   both=(e)=>{
     {this.handleLogin(e)}
-    {this.openPage(e)}
+    // {this.openPage(e)}
   }
   
   render() {
@@ -51,7 +51,7 @@ export default class Login extends Component {
         <p>
           <button
             type="submit"
-            disabled={!this.state.emai && !this.state.password}
+            disabled={!this.state.email && !this.state.password}
           >
             Login
           </button>
