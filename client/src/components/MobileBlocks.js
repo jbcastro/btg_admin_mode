@@ -395,7 +395,7 @@ const MobileBlocks = ({
               {data.country} served in {aOrAn(data.mise)}{" "}
               {fullGlassName(data.mise)} for ${data.price}
               <br></br>
-              Status: {data.status} <br></br>Appellation: {data.appellation}{" "}
+            Status: {data.status} <br></br>Appellation: {data.appellation}{" "}
               <br></br>
               Color: {data.color}
               <br></br>

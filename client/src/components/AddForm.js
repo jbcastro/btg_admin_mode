@@ -49,47 +49,47 @@ const AddForm = (props) => {
           </p>
           <label class="nobreak">
             Name:
-            <Text value="" field="name" onBlur={onChange} />
+            <Text value="" field="name" onBlur={onChange} className="text" className="text"/>
           </label>{" "}
           <label class="nobreak">
             Vinyard:
-            <Text field="vinyard" onBlur={onChange} />
+            <Text field="vinyard" onBlur={onChange} className="text" />
           </label>{" "}
           <label class="nobreak">
             Grapes:
-            <Text field="grapes" onBlur={onChange} />
+            <Text field="grapes" onBlur={onChange} className="text" />
           </label>{" "}
           <label class="nobreak">
             Year:
-            <Text field="year" onBlur={onChange} />
+            <Text field="year" onBlur={onChange} className="text" />
           </label>{" "}
           <label class="nobreak">
             Place:
-            <Text field="place" onBlur={onChange} />
+            <Text field="place" onBlur={onChange} className="text" />
           </label>{" "}
           <label class="nobreak">
             Area:
-            <Text field="area" onBlur={onChange} />
+            <Text field="area" onBlur={onChange} className="text" />
           </label>{" "}
           <label class="nobreak">
             Country:
-            <Text field="country" onBlur={onChange} />
+            <Text field="country" onBlur={onChange} className="text" />
           </label>{" "}
           <label class="nobreak">
             Appellation:
-            <Text field="appellation" onBlur={onChange} />
+            <Text field="appellation" onBlur={onChange} className="text" />
           </label>{" "}
           <label class="nobreak">
             Price:
-            <Text field="price" type="number" onBlur={onChange} />
+            <Text field="price" type="number" onBlur={onChange} className="text" />
           </label>
           <label class="nobreak">
             Picture:
-            <Text field="picture" onBlur={onChange} />
+            <Text field="picture" onBlur={onChange} className="text" />
           </label>
           <p></p>
           <label class="nobreak">
-            Mise:
+            Mise: {" "}
             <Select field="mise" initialValue="AP" onBlur={onChange}>
               <Option value="AP">AP</Option>
 
@@ -105,7 +105,7 @@ const AddForm = (props) => {
             </Select>
           </label>
           <label class="nobreak">
-            Color:
+            {" "}Color:{" "}
             <Select field="color" initialValue="red">
               <Option value="red">Red</Option>
               <Option value="white">White</Option>
@@ -114,7 +114,7 @@ const AddForm = (props) => {
             </Select>
           </label>
           <label class="nobreak">
-            Status:
+           {" "} Status:{" "}
             <Select field="status" initialValue="added">
               <Option value="added">Added</Option>
               <Option value="none">None</Option>
@@ -124,7 +124,7 @@ const AddForm = (props) => {
             </Select>
           </label>
           <label class="nobreak">
-            Coravin: <Checkbox field="coravin" />
+            {" "}Coravin: <Checkbox field="coravin" />
           </label>
           <br></br>
           <h3>Individual Grapes</h3>

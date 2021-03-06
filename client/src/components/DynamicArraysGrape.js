@@ -13,7 +13,7 @@ const DynamicArraysGrape = (props) => {
             {fields.map(({ field, key, remove }, i) => (
               <label htmlFor={i} key={key}>
                 Grape {i + 1}:
-                <Text field={field} id={`grape${i}`} />
+                <Text field={field} id={`grape${i}`} className="text" />
                 <button type="button" onClick={remove} tabIndex="-1">
                   Remove This Grape
                 </button>
