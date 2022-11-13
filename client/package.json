@@ -23,7 +23,7 @@
     "react-hook-form": "^4.7.0",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "^5.0.1",
     "react-search-box": "^2.0.2",
     "typescript": "^3.8.3",
     "yarn": "^1.22.4"
